@@ -1,0 +1,48 @@
+RPS battle system
+
+
+
+-Basic Idea-
+	-players play a generalized version of Rock Paper Scissors
+	-instead of a discrete choice between rock(1,0,0), paper(0,1,0), and scissors(0,0,1), the player chooses any normalized 3-vector: (r,p,s)
+	-The RPS vectors of the two players are compared, and the winner is determined
+	-players make their choice of vector by orienting a sphere
+
+
+
+-Other Features/Ideas
+	-The game is live, rather than turn based-
+		-each player has a trigger to 'attack', forcing a comparison of RPS vectors
+	-Continuous scoring-
+		-points are float-valued, determined by outcome of vector comparison
+	-Discrete scoring-
+		-points are integer valued, with pre-defined ranges for vector comparison output
+		-e.g. 0 points: 0.0-0.5, 1 point: 0.5-0.9, 2 points, 0.9-1.0
+	-AI-
+		-It would be quite fun to try to write an optimal AI for this game
+	-Separate attack/defense-
+		-each player controls two independent spheres: one for attack, one for defense
+		-points can only be scored by attacking
+		-the attacking player's attack vector is compared against the defending player's defense vector
+	-angular momentum-
+		-the spheres conserve angular momentum
+		-players control sphere orientation through application of torque
+		-there should probably be some small friction applied
+		-also, perhaps a "brake" key, to significantly increase friction
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
