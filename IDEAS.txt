@@ -36,7 +36,12 @@ RPS battle system
 
 
 
-
+-Potential Applications-
+	-GAME: Co-Pilot-
+		-A minimalist space dogfight game (could be limited to 1vAI or 1v1), perhaps set in an asteroid field (something like Frontier)
+		-The pilot flies the ship, just as in Frontier
+		-The co-pilot controls the ships laser frequency and shield frequency using the RPS sphere system
+		-Which player should control the laser aiming/trigger?
 
 
 
