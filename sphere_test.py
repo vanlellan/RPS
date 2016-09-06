@@ -54,10 +54,11 @@ for ph in phiList:
 def drawCircle():
 	DISPLAYSURF.fill(BLACK)
 	for p in points:
-		if (p[2]) >= 0.0:
-			pygame.draw.circle(DISPLAYSURF, RED, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
-		else:
-			pygame.draw.circle(DISPLAYSURF, GRAY, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
+		if (w[0]*p[0]+w[1]*p[1]+w[2]*p[2]) >= 0.0:
+			if (p[2]) >= 0.0:
+				pygame.draw.circle(DISPLAYSURF, RED, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
+			else:
+				pygame.draw.circle(DISPLAYSURF, GRAY, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
 
 def rotateSphere(a,sign):
 	global u
@@ -122,7 +123,7 @@ def gameloop():
 					rotateSphere(w,-1.0)
 		drawCircle()
 		pygame.display.update()
-		time.sleep(0.1)
+		time.sleep(0.02)
 
 
 gameloop()
