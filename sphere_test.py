@@ -108,19 +108,32 @@ def gameloop():
 					sys.exit()
 				elif event.key == K_RETURN:
 					stepToggle = not stepToggle
-				elif event.key == K_i:
-					#positive rotation around u-axis
-					rotateSphere(u,1.0)
-				elif event.key == K_k:
-					rotateSphere(u,-1.0)
-				elif event.key == K_l:
-					rotateSphere(v,1.0)
-				elif event.key == K_j:
-					rotateSphere(v,-1.0)
-				elif event.key == K_u:
-					rotateSphere(w,1.0)
-				elif event.key == K_o:
-					rotateSphere(w,-1.0)
+	#			elif event.key == K_i:
+	#				#positive rotation around u-axis
+	#				rotateSphere(u,1.0)
+	#			elif event.key == K_k:
+	#				rotateSphere(u,-1.0)
+	#			elif event.key == K_l:
+	#				rotateSphere(v,1.0)
+	#			elif event.key == K_j:
+	#				rotateSphere(v,-1.0)
+	#			elif event.key == K_u:
+	#				rotateSphere(w,1.0)
+	#			elif event.key == K_o:
+	#				rotateSphere(w,-1.0)
+		press = pygame.key.get_pressed()
+		if press[K_i]:
+			rotateSphere(u,1.0)
+		if press[K_k]:
+			rotateSphere(u,-1.0)
+		if press[K_l]:
+			rotateSphere(v,1.0)
+		if press[K_j]:
+			rotateSphere(v,-1.0)
+		if press[K_u]:
+			rotateSphere(w,1.0)
+		if press[K_o]:
+			rotateSphere(w,-1.0)
 		drawCircle()
 		pygame.display.update()
 		time.sleep(0.02)
