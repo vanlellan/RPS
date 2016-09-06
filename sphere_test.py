@@ -43,8 +43,8 @@ v = [0.0,1.0,0.0]
 w = [0.0,0.0,1.0]
 
 
-thetaList = np.arange(0.0,np.pi,0.1)
-phiList = np.arange(0.0,2.0*np.pi,0.2)
+thetaList = np.arange(0.0,np.pi,0.05)
+phiList = np.arange(0.0,2.0*np.pi,0.05)
 points = []
 for ph in phiList:
 	for th in thetaList:
@@ -55,10 +55,11 @@ def drawCircle():
 	DISPLAYSURF.fill(BLACK)
 	for p in points:
 		if (w[0]*p[0]+w[1]*p[1]+w[2]*p[2]) >= 0.0:
-			if (p[2]) >= 0.0:
-				pygame.draw.circle(DISPLAYSURF, RED, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
-			else:
-				pygame.draw.circle(DISPLAYSURF, GRAY, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
+			pygame.draw.circle(DISPLAYSURF, (int(128.0*p[0])+127,int(128.0*p[1])+127,int(128.0*p[2])+127), (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
+	#		if (p[2]) >= 0.0:
+	#			pygame.draw.circle(DISPLAYSURF, RED, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
+	#		else:
+	#			pygame.draw.circle(DISPLAYSURF, GRAY, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
 
 def rotateSphere(a,sign):
 	global u
