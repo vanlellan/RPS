@@ -54,7 +54,7 @@ for ph in phiList:
 def drawCircle():
 	DISPLAYSURF.fill(BLACK)
 	for p in points:
-		pygame.draw.circle(DISPLAYSURF, RED, (int(200.0*(u[0]*p[0]+u[1]*p[1]*u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
+		pygame.draw.circle(DISPLAYSURF, RED, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
 
 def rotateSphere(a,sign):
 	global u
