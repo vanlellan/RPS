@@ -113,13 +113,13 @@ def gameloop():
 					rotateSphere(u,1.0)
 				elif event.key == K_k:
 					rotateSphere(u,-1.0)
-				elif event.key == K_j:
-					rotateSphere(v,1.0)
 				elif event.key == K_l:
+					rotateSphere(v,1.0)
+				elif event.key == K_j:
 					rotateSphere(v,-1.0)
-				elif event.key == K_o:
-					rotateSphere(w,1.0)
 				elif event.key == K_u:
+					rotateSphere(w,1.0)
+				elif event.key == K_o:
 					rotateSphere(w,-1.0)
 		drawCircle()
 		pygame.display.update()
