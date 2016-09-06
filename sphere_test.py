@@ -55,7 +55,12 @@ def drawCircle():
 	DISPLAYSURF.fill(BLACK)
 	for p in points:
 		if (w[0]*p[0]+w[1]*p[1]+w[2]*p[2]) >= 0.0:
-			pygame.draw.circle(DISPLAYSURF, (int(128.0*p[0])+127,int(128.0*p[1])+127,int(128.0*p[2])+127), (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
+			tempR = int(255.0 * m.sqrt(max(0.0, p[0])**2.0+max(0.0,-p[1])**2.0+max(0.0,-p[2])**2.0) )
+			tempG = int(255.0 * m.sqrt(max(0.0,-p[0])**2.0+max(0.0, p[1])**2.0+max(0.0,-p[2])**2.0) )
+			tempB = int(255.0 * m.sqrt(max(0.0,-p[0])**2.0+max(0.0,-p[1])**2.0+max(0.0, p[2])**2.0) )
+			#print tempR, tempG, tempB
+			pygame.draw.circle(DISPLAYSURF, (tempR,tempG,tempB), (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 7, 0)
+	#		pygame.draw.circle(DISPLAYSURF, (int(128.0*p[0])+127,int(128.0*p[1])+127,int(128.0*p[2])+127), (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 7, 0)
 	#		if (p[2]) >= 0.0:
 	#			pygame.draw.circle(DISPLAYSURF, RED, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
 	#		else:
