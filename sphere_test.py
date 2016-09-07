@@ -1,7 +1,10 @@
-# A implementation of Conway's Game of Live on a hexagonal grid
-# to practice calcuations and graphics with hexagonal grids
+# Testing implementation of sphere rotation for RPS battle mechanic
+# R Evan McClellan -- 2016-09-06
 #
-# R Evan McClellan -- 2016-07-24
+# To-Do:
+#	flatten circles toward edge to reduce overlap artefact
+#	implement 'angular momentum' and friction
+#	add dummy 'opponent' and implement RPS comparison and win/loss status
 
 import pygame, sys
 from pygame.locals import *
@@ -11,15 +14,13 @@ import matplotlib.pyplot as plt
 import subprocess
 import numpy as np
 import math as m
-from quaternionClass import quaternion
+from RPSClasses import *
 
 pygame.init()
 subprocess.call(['speech-dispatcher'])
 
 DISPLAYWIDTH = 1200
 DISPLAYHEIGHT = 800
-
-SCALEFACTOR = 10
 
 # set up the colors
 BLACK = (  0,   0,   0)
@@ -32,118 +33,45 @@ YELLOW= (255, 255, 100)
 
 # set up the window
 DISPLAYSURF = pygame.display.set_mode((DISPLAYWIDTH, DISPLAYHEIGHT), 0, 32)
-pygame.display.set_caption('Thing')
-
-#HARD CODE AMOUNT OF ROTATION PER KEYPRESS (0.1 radians)
-costhh = m.cos(0.1/2.0)
-sinthh = m.sin(0.1/2.0)
-
-u = [1.0,0.0,0.0]
-v = [0.0,1.0,0.0]
-w = [0.0,0.0,1.0]
+pygame.display.set_caption("RPS Test")
 
 
-thetaList = np.arange(0.0,np.pi,0.05)
-phiList = np.arange(0.0,2.0*np.pi,0.05)
-points = []
-for ph in phiList:
-	for th in thetaList:
-		points.append((m.cos(th)*m.sin(ph), m.sin(th)*m.sin(ph), m.cos(ph)))
-
-
-def drawCircle():
+def drawSphere(aSphere, aP):
 	DISPLAYSURF.fill(BLACK)
-	for p in points:
-		if (w[0]*p[0]+w[1]*p[1]+w[2]*p[2]) >= 0.0:
-			tempR = int(255.0 * m.sqrt(max(0.0, p[0])**2.0+max(0.0,-p[1])**2.0+max(0.0,-p[2])**2.0) )
-			tempG = int(255.0 * m.sqrt(max(0.0,-p[0])**2.0+max(0.0, p[1])**2.0+max(0.0,-p[2])**2.0) )
-			tempB = int(255.0 * m.sqrt(max(0.0,-p[0])**2.0+max(0.0,-p[1])**2.0+max(0.0, p[2])**2.0) )
-			pygame.draw.circle(DISPLAYSURF, (tempR,tempG,tempB), (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 7, 0)
-	#		pygame.draw.circle(DISPLAYSURF, (int(128.0*p[0])+127,int(128.0*p[1])+127,int(128.0*p[2])+127), (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 7, 0)
-	#		if (p[2]) >= 0.0:
-	#			pygame.draw.circle(DISPLAYSURF, RED, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
-	#		else:
-	#			pygame.draw.circle(DISPLAYSURF, GRAY, (int(200.0*(u[0]*p[0]+u[1]*p[1]+u[2]*p[2]))+600,int(200.0*(v[0]*p[0]+v[1]*p[1]+v[2]*p[2]))+400), 5, 0)
+	for i,p in enumerate(aSphere.points):
+		if (aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]) >= 0.0:
+			pygame.draw.circle(DISPLAYSURF, aSphere.colors[i], (int(200.0*(aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]))+600,int(200.0*(aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]))+400), 5, 3)
 
-def rotateSphere(a,sign):
-	global u
-	global v
-	global w
-	q = quaternion(costhh, sign*a[0]*sinthh, sign*a[1]*sinthh, sign*a[2]*sinthh)
-	uQ = quaternion(0.0, u[0], u[1], u[2])
-	uQ.multL(q)
-	q.conjugate()
-	uQ.multR(q)
-	u[0] = uQ.comp[1]
-	u[1] = uQ.comp[2]
-	u[2] = uQ.comp[3]
-	vQ = quaternion(0.0, v[0], v[1], v[2])
-	q.conjugate()
-	vQ.multL(q)
-	q.conjugate()
-	vQ.multR(q)
-	v[0] = vQ.comp[1]
-	v[1] = vQ.comp[2]
-	v[2] = vQ.comp[3]
-	wQ = quaternion(0.0, w[0], w[1], w[2])
-	q.conjugate()
-	wQ.multL(q)
-	q.conjugate()
-	wQ.multR(q)
-	w[0] = wQ.comp[1]
-	w[1] = wQ.comp[2]
-	w[2] = wQ.comp[3]
-
-def gameloop():
-	global u
-	global v
-	global w
+def gameloop(aSphere, aPlayer):
 	while True:
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				pygame.quit()
 				sys.exit()
-#			elif event.type == MOUSEMOTION:
-#				xcur, ycur = event.pos
-#				cursor = getCellFromCursor(xcur,ycur)
 			elif event.type == KEYDOWN:
 				if event.key == K_ESCAPE:
 					subprocess.call(['spd-say','shutting down'])
 					pygame.quit()
 					sys.exit()
-				elif event.key == K_RETURN:
-					stepToggle = not stepToggle
-	#			elif event.key == K_i:
-	#				#positive rotation around u-axis
-	#				rotateSphere(u,1.0)
-	#			elif event.key == K_k:
-	#				rotateSphere(u,-1.0)
-	#			elif event.key == K_l:
-	#				rotateSphere(v,1.0)
-	#			elif event.key == K_j:
-	#				rotateSphere(v,-1.0)
-	#			elif event.key == K_u:
-	#				rotateSphere(w,1.0)
-	#			elif event.key == K_o:
-	#				rotateSphere(w,-1.0)
 		press = pygame.key.get_pressed()
 		if press[K_i]:
-			rotateSphere(u,1.0)
+			aPlayer.rotate(aPlayer.u, 1.0)
 		if press[K_k]:
-			rotateSphere(u,-1.0)
+			aPlayer.rotate(aPlayer.u,-1.0)
 		if press[K_l]:
-			rotateSphere(v,1.0)
+			aPlayer.rotate(aPlayer.v, 1.0)
 		if press[K_j]:
-			rotateSphere(v,-1.0)
+			aPlayer.rotate(aPlayer.v,-1.0)
 		if press[K_u]:
-			rotateSphere(w,1.0)
+			aPlayer.rotate(aPlayer.w, 1.0)
 		if press[K_o]:
-			rotateSphere(w,-1.0)
-		drawCircle()
+			aPlayer.rotate(aPlayer.w,-1.0)
+		drawSphere(aSphere, aPlayer)
 		pygame.display.update()
 		time.sleep(0.02)
 
-
-gameloop()
+player1 = RPSPlayer()
+sphere1 = RPSSphere()
+gameloop(sphere1,player1)
 
 
