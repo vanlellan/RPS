@@ -9,15 +9,11 @@
 import pygame, sys
 from pygame.locals import *
 import time
-import random
-import matplotlib.pyplot as plt
-import subprocess
 import numpy as np
 import math as m
 from RPSClasses import *
 
 pygame.init()
-subprocess.call(['speech-dispatcher'])
 
 DISPLAYWIDTH = 1200
 DISPLAYHEIGHT = 800
@@ -35,6 +31,9 @@ YELLOW= (255, 255, 100)
 DISPLAYSURF = pygame.display.set_mode((DISPLAYWIDTH, DISPLAYHEIGHT), 0, 32)
 pygame.display.set_caption("RPS Test")
 
+def drawDummy(aDummy):
+			pygame.draw.circle(DISPLAYSURF, aDummy.colors, (100,100), 20, 0)
+	
 
 def drawSphere(aSphere, aP):
 	DISPLAYSURF.fill(BLACK)
@@ -42,7 +41,7 @@ def drawSphere(aSphere, aP):
 		if (aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]) >= 0.0:
 			pygame.draw.circle(DISPLAYSURF, aSphere.colors[i], (int(200.0*(aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]))+600,int(200.0*(aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]))+400), 5, 3)
 
-def gameloop(aSphere, aPlayer):
+def gameloop(aSphere, aPlayer, aDummy):
 	while True:
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -50,7 +49,6 @@ def gameloop(aSphere, aPlayer):
 				sys.exit()
 			elif event.type == KEYDOWN:
 				if event.key == K_ESCAPE:
-					subprocess.call(['spd-say','shutting down'])
 					pygame.quit()
 					sys.exit()
 		press = pygame.key.get_pressed()
@@ -67,11 +65,14 @@ def gameloop(aSphere, aPlayer):
 		if press[K_o]:
 			aPlayer.rotate(aPlayer.w,-1.0)
 		drawSphere(aSphere, aPlayer)
+		drawDummy(aDummy)
 		pygame.display.update()
 		time.sleep(0.02)
 
+dummy1 = RPSDummy()
+dummy1.randomize()
 player1 = RPSPlayer()
 sphere1 = RPSSphere()
-gameloop(sphere1,player1)
+gameloop(sphere1,player1,dummy1)
 
 

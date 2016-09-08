@@ -1,7 +1,7 @@
 #Classes for RPS games: Quaternion, RPSPlayer, RPSSphere
 import numpy as np
 import math as m
-
+import random as r
 
 class Quaternion():
 	#notes:
@@ -36,6 +36,31 @@ class Quaternion():
 		self.comp = new
 
 
+class RPSDummy():
+	#notes
+	def __init__(self):
+		self.w = [0.0,0.0,1.0]
+		self.colors = (255,255,255)
+
+	def seed(self):
+		r.seed()
+
+	def randomize(self):
+		theta = r.uniform(0.0,m.pi)
+		phi = r.uniform(0.0,2.0*m.pi)
+		self.w = [m.cos(theta)*m.sin(phi), m.sin(theta)*m.sin(phi), m.cos(phi)]
+
+		tempR = int(255.0 * m.sqrt(max(0.0, self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0,-self.w[2])**2.0) )
+		tempG = int(255.0 * m.sqrt(max(0.0,-self.w[0])**2.0+max(0.0, self.w[1])**2.0+max(0.0,-self.w[2])**2.0) )
+		tempB = int(255.0 * m.sqrt(max(0.0,-self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0, self.w[2])**2.0) )
+		self.colors = (tempR,tempG,tempB)
+
+	# More complicated than needed here, but potentially useful for other applications
+	#	wXz = [(1.0/m.sqrt(w[0]**2.0+w[1]**2.0))*w[1],-(1.0/m.sqrt(w[0]**2.0+w[1]**2.0))*w[0],0.0]
+	#	wQ = Quaternion(0.0,self.w[0],self.w[1],self.w[2])
+	#	A = m.cos(m.pi/4.0)
+	#	B = m.sin(m.pi/4.0)
+	#	q = Quaternion(A,B*wXz[0],B*wXz[1],B*wXz[2])
 
 class RPSPlayer():
 	#notes:
