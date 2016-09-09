@@ -1,5 +1,4 @@
 #Classes for RPS games: Quaternion, RPSPlayer, RPSSphere
-import numpy as np
 import math as m
 import random as r
 
@@ -64,12 +63,21 @@ class RPSDummy():
 
 class RPSPlayer():
 	#notes:
-	def __init__(self):
+	def __init__(self,aX,aY):
+		self.centerX = aX
+		self.centerY = aY
 		self.u = [1.0,0.0,0.0]
 		self.v = [0.0,1.0,0.0]
 		self.w = [0.0,0.0,1.0]
-		self.scalarSpeed = m.cos(0.1/2.0)
-		self.vectorSpeed = m.sin(0.1/2.0)
+		self.scalarSpeed = m.cos(0.05/2.0)
+		self.vectorSpeed = m.sin(0.05/2.0)
+		self.calcColor()
+
+	def calcColor(self):
+		tempR = int(255.0 * m.sqrt(max(0.0, self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0,-self.w[2])**2.0) )
+		tempG = int(255.0 * m.sqrt(max(0.0,-self.w[0])**2.0+max(0.0, self.w[1])**2.0+max(0.0,-self.w[2])**2.0) )
+		tempB = int(255.0 * m.sqrt(max(0.0,-self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0, self.w[2])**2.0) )
+		self.color = (tempR,tempG,tempB)
 
 	def rotate(self,axis,spin):
 		q = Quaternion(self.scalarSpeed, spin*axis[0]*self.vectorSpeed, spin*axis[1]*self.vectorSpeed, spin*axis[2]*self.vectorSpeed)
@@ -100,8 +108,8 @@ class RPSPlayer():
 class RPSSphere():
 	#notes:
 	def __init__(self):
-		thetaList = np.arange(0.0,np.pi,0.05)
-		phiList = np.arange(0.0,2.0*np.pi,0.05)
+		thetaList = [float(x)*m.pi/25.0 for x in range(25)]
+		phiList = [float(x)*2.0*m.pi/60.0 for x in range(60)]
 		self.points = []
 		self.colors = []
 		for ph in phiList:

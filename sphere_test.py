@@ -4,12 +4,13 @@
 # To-Do:
 #	flatten circles toward edge to reduce overlap artefact
 #	implement 'angular momentum' and friction
-#	add dummy 'opponent' and implement RPS comparison and win/loss status
+#	implement RPS comparison and win/loss status (tug-of-war, cumulative continuous win/loss)
+#DONE	add player 2, add "opponent" color swatch above each player sphere
+#	move keybindings to player class
 
 import pygame, sys
 from pygame.locals import *
 import time
-import numpy as np
 import math as m
 from RPSClasses import *
 
@@ -31,17 +32,15 @@ YELLOW= (255, 255, 100)
 DISPLAYSURF = pygame.display.set_mode((DISPLAYWIDTH, DISPLAYHEIGHT), 0, 32)
 pygame.display.set_caption("RPS Test")
 
-def drawDummy(aDummy):
-			pygame.draw.circle(DISPLAYSURF, aDummy.colors, (100,100), 20, 0)
-	
+def drawSwatch(aPlayer, aOpponent):
+	pygame.draw.circle(DISPLAYSURF, aOpponent.color, (aPlayer.centerX,aPlayer.centerY-300), 40, 0)
 
 def drawSphere(aSphere, aP):
-	DISPLAYSURF.fill(BLACK)
 	for i,p in enumerate(aSphere.points):
 		if (aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]) >= 0.0:
-			pygame.draw.circle(DISPLAYSURF, aSphere.colors[i], (int(200.0*(aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]))+600,int(200.0*(aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]))+400), 5, 3)
+			pygame.draw.circle(DISPLAYSURF, aSphere.colors[i], (int(200.0*(aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]))+aP.centerX,int(200.0*(aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]))+aP.centerY), 10, 6)
 
-def gameloop(aSphere, aPlayer, aDummy):
+def gameloop(aSphere, aPlayer1, aPlayer2):
 	while True:
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -52,27 +51,43 @@ def gameloop(aSphere, aPlayer, aDummy):
 					pygame.quit()
 					sys.exit()
 		press = pygame.key.get_pressed()
+		if press[K_w]:
+			aPlayer1.rotate(aPlayer1.u, 1.0)
+		if press[K_s]:
+			aPlayer1.rotate(aPlayer1.u,-1.0)
+		if press[K_d]:
+			aPlayer1.rotate(aPlayer1.v, 1.0)
+		if press[K_a]:
+			aPlayer1.rotate(aPlayer1.v,-1.0)
+		if press[K_q]:
+			aPlayer1.rotate(aPlayer1.w, 1.0)
+		if press[K_e]:
+			aPlayer1.rotate(aPlayer1.w,-1.0)
 		if press[K_i]:
-			aPlayer.rotate(aPlayer.u, 1.0)
+			aPlayer2.rotate(aPlayer2.u, 1.0)
 		if press[K_k]:
-			aPlayer.rotate(aPlayer.u,-1.0)
+			aPlayer2.rotate(aPlayer2.u,-1.0)
 		if press[K_l]:
-			aPlayer.rotate(aPlayer.v, 1.0)
+			aPlayer2.rotate(aPlayer2.v, 1.0)
 		if press[K_j]:
-			aPlayer.rotate(aPlayer.v,-1.0)
+			aPlayer2.rotate(aPlayer2.v,-1.0)
 		if press[K_u]:
-			aPlayer.rotate(aPlayer.w, 1.0)
+			aPlayer2.rotate(aPlayer2.w, 1.0)
 		if press[K_o]:
-			aPlayer.rotate(aPlayer.w,-1.0)
-		drawSphere(aSphere, aPlayer)
-		drawDummy(aDummy)
+			aPlayer2.rotate(aPlayer2.w,-1.0)
+		aPlayer1.calcColor()
+		aPlayer2.calcColor()
+		DISPLAYSURF.fill(BLACK)
+		drawSphere(aSphere, aPlayer1)
+		drawSphere(aSphere, aPlayer2)
+		drawSwatch(aPlayer1, aPlayer2)
+		drawSwatch(aPlayer2, aPlayer1)
 		pygame.display.update()
 		time.sleep(0.02)
 
-dummy1 = RPSDummy()
-dummy1.randomize()
-player1 = RPSPlayer()
+player1 = RPSPlayer(300,400)
+player2 = RPSPlayer(900,400)
 sphere1 = RPSSphere()
-gameloop(sphere1,player1,dummy1)
+gameloop(sphere1,player1,player2)
 
 
