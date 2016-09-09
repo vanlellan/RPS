@@ -32,6 +32,14 @@ YELLOW= (255, 255, 100)
 DISPLAYSURF = pygame.display.set_mode((DISPLAYWIDTH, DISPLAYHEIGHT), 0, 32)
 pygame.display.set_caption("RPS Test")
 
+def attack(aP1, aP2):
+	#P1 attacks P2
+	result = aP1.w[0]*(aP2.w[2]-aP2.w[1]) + aP1.w[1]*(aP2.w[0]-aP2.w[2]) + aP1.w[2]*(aP2.w[1]-aP2.w[0])
+	return result
+
+def drawScore(aScore, aColor):
+	pygame.draw.circle(DISPLAYSURF, aColor, (DISPLAYWIDTH/2+int(aScore),700), 40, 0)
+
 def drawSwatch(aPlayer, aOpponent):
 	pygame.draw.circle(DISPLAYSURF, aOpponent.color, (aPlayer.centerX,aPlayer.centerY-300), 40, 0)
 
@@ -41,6 +49,8 @@ def drawSphere(aSphere, aP):
 			pygame.draw.circle(DISPLAYSURF, aSphere.colors[i], (int(200.0*(aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]))+aP.centerX,int(200.0*(aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]))+aP.centerY), 10, 6)
 
 def gameloop(aSphere, aPlayer1, aPlayer2):
+	SCORE = 0.0
+	scoreColor = (255,255,255)
 	while True:
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -77,12 +87,25 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 			aPlayer2.rotate(aPlayer2.w,-1.0)
 		aPlayer1.calcColor()
 		aPlayer2.calcColor()
+		SCORE -= 1.0*attack(aPlayer1,aPlayer2)
 		DISPLAYSURF.fill(BLACK)
 		drawSphere(aSphere, aPlayer1)
 		drawSphere(aSphere, aPlayer2)
 		drawSwatch(aPlayer1, aPlayer2)
 		drawSwatch(aPlayer2, aPlayer1)
+		pygame.draw.circle(DISPLAYSURF, RED, (aPlayer1.centerX,700), 45, 5)
+		pygame.draw.circle(DISPLAYSURF, RED, (aPlayer2.centerX,700), 45, 5)
+		drawScore(SCORE,scoreColor)
 		pygame.display.update()
+		if SCORE > 300 or SCORE < -300:
+			scoreColor = (255,0,0)
+			drawScore(SCORE,scoreColor)
+			pygame.display.update()
+			time.sleep(2.0)
+			aPlayer1.reset()
+			aPlayer2.reset()
+			SCORE = 0.0
+			scoreColor = (255,255,255)
 		time.sleep(0.02)
 
 player1 = RPSPlayer(300,400)

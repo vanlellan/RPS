@@ -73,6 +73,11 @@ class RPSPlayer():
 		self.vectorSpeed = m.sin(0.05/2.0)
 		self.calcColor()
 
+	def reset(self):
+		self.u = [1.0,0.0,0.0]
+		self.v = [0.0,1.0,0.0]
+		self.w = [0.0,0.0,1.0]
+
 	def calcColor(self):
 		tempR = int(255.0 * m.sqrt(max(0.0, self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0,-self.w[2])**2.0) )
 		tempG = int(255.0 * m.sqrt(max(0.0,-self.w[0])**2.0+max(0.0, self.w[1])**2.0+max(0.0,-self.w[2])**2.0) )
