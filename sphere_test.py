@@ -7,6 +7,7 @@
 #	implement RPS comparison and win/loss status (tug-of-war, cumulative continuous win/loss)
 #DONE	add player 2, add "opponent" color swatch above each player sphere
 #	move keybindings to player class
+#	make circles smaller toward horizon
 
 import pygame, sys
 from pygame.locals import *
@@ -42,11 +43,15 @@ def drawScore(aScore, aColor):
 
 def drawSwatch(aPlayer, aOpponent):
 	pygame.draw.circle(DISPLAYSURF, aOpponent.color, (aPlayer.centerX,aPlayer.centerY-300), 40, 0)
+	pygame.draw.circle(DISPLAYSURF, (aOpponent.color[1],aOpponent.color[2],aOpponent.color[0]), (aPlayer.centerX-50,aPlayer.centerY-250), 10, 0)
+	pygame.draw.circle(DISPLAYSURF, (255.-aOpponent.color[2],255.-aOpponent.color[0],255.-aOpponent.color[1]), (aPlayer.centerX+50,aPlayer.centerY-250), 10, 0)
 
 def drawSphere(aSphere, aP):
 	for i,p in enumerate(aSphere.points):
 		if (aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]) >= 0.0:
-			pygame.draw.circle(DISPLAYSURF, aSphere.colors[i], (int(200.0*(aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]))+aP.centerX,int(200.0*(aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]))+aP.centerY), 10, 6)
+			pygame.draw.circle(DISPLAYSURF, aSphere.colors[i], (int(200.0*(aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]))+aP.centerX,int(200.0*(aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]))+aP.centerY), 10, 0)
+	pygame.draw.circle(DISPLAYSURF, (255.-aP.color[0],255.-aP.color[1],255.-aP.color[2]), (aP.centerX,aP.centerY), 12, 2)
+
 
 def gameloop(aSphere, aPlayer1, aPlayer2):
 	SCORE = 0.0
