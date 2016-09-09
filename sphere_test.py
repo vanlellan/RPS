@@ -49,7 +49,10 @@ def drawSwatch(aPlayer, aOpponent):
 def drawSphere(aSphere, aP):
 	for i,p in enumerate(aSphere.points):
 		if (aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]) >= 0.0:
-			pygame.draw.circle(DISPLAYSURF, aSphere.colors[i], (int(200.0*(aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]))+aP.centerX,int(200.0*(aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]))+aP.centerY), 10, 0)
+			x = aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]
+			y = aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]
+			r = m.sqrt(x**2.0+y**2.0)
+			pygame.draw.circle(DISPLAYSURF, aSphere.colors[i], (int(200.0*x+aP.centerX),int(200.0*y+aP.centerY)), int(10*(1.0-(r*r/2.0))), 0)
 	pygame.draw.circle(DISPLAYSURF, (255.-aP.color[0],255.-aP.color[1],255.-aP.color[2]), (aP.centerX,aP.centerY), 12, 2)
 
 
