@@ -31,7 +31,7 @@ YELLOW= (255, 255, 100)
 
 # set up the window
 DISPLAYSURF = pygame.display.set_mode((DISPLAYWIDTH, DISPLAYHEIGHT), 0, 32)
-pygame.display.set_caption("RPS Test")
+pygame.display.set_caption("TUG OF WAR")
 
 def attack(aP1, aP2):
 	#P1 attacks P2
@@ -43,8 +43,8 @@ def drawScore(aScore, aColor):
 
 def drawSwatch(aPlayer, aOpponent):
 	pygame.draw.circle(DISPLAYSURF, aOpponent.color, (aPlayer.centerX,aPlayer.centerY-300), 40, 0)
-	pygame.draw.circle(DISPLAYSURF, (aOpponent.color[1],aOpponent.color[2],aOpponent.color[0]), (aPlayer.centerX-50,aPlayer.centerY-250), 10, 0)
-	pygame.draw.circle(DISPLAYSURF, (255.-aOpponent.color[2],255.-aOpponent.color[0],255.-aOpponent.color[1]), (aPlayer.centerX+50,aPlayer.centerY-250), 10, 0)
+	pygame.draw.circle(DISPLAYSURF, (aOpponent.color[2],aOpponent.color[0],aOpponent.color[1]), (aPlayer.centerX-50,aPlayer.centerY-250), 10, 0)
+	pygame.draw.circle(DISPLAYSURF, (255.-aOpponent.color[1],255.-aOpponent.color[2],255.-aOpponent.color[0]), (aPlayer.centerX+50,aPlayer.centerY-250), 10, 0)
 
 def drawSphere(aSphere, aP):
 	for i,p in enumerate(aSphere.points):
@@ -98,12 +98,12 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 		drawSphere(aSphere, aPlayer2)
 		drawSwatch(aPlayer1, aPlayer2)
 		drawSwatch(aPlayer2, aPlayer1)
-		pygame.draw.circle(DISPLAYSURF, RED, (aPlayer1.centerX,700), 45, 5)
-		pygame.draw.circle(DISPLAYSURF, RED, (aPlayer2.centerX,700), 45, 5)
+		pygame.draw.circle(DISPLAYSURF, GREEN, (aPlayer1.centerX,700), 45, 5)
+		pygame.draw.circle(DISPLAYSURF, GREEN, (aPlayer2.centerX,700), 45, 5)
 		drawScore(SCORE,scoreColor)
 		pygame.display.update()
 		if SCORE > 300 or SCORE < -300:
-			scoreColor = (255,0,0)
+			scoreColor = (0,255,0)
 			drawScore(SCORE,scoreColor)
 			pygame.display.update()
 			time.sleep(2.0)
