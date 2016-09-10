@@ -113,13 +113,17 @@ class RPSPlayer():
 class RPSSphere():
 	#notes:
 	def __init__(self):
-		thetaList = [float(x)*m.pi/25.0 for x in range(25)]
-		phiList = [float(x)*2.0*m.pi/60.0 for x in range(60)]
+		thetaList = [float(x)*m.pi/24.0 for x in range(25)]
+		rPerp = [m.sin(x) for x in thetaList]
+		phiListList = []
+		for rp in rPerp:
+			num = 1+int(60.0*rp)
+			phiListList.append([float(x)*2.0*m.pi/float(num) for x in range(num)])
 		self.points = []
 		self.colors = []
-		for ph in phiList:
-			for th in thetaList:
-				self.points.append((m.cos(th)*m.sin(ph), m.sin(th)*m.sin(ph), m.cos(ph)))
+		for i,th in enumerate(thetaList):
+			for ph in phiListList[i]:
+				self.points.append((m.cos(ph)*m.sin(th), m.sin(ph)*m.sin(th), m.cos(th)))
 		for p in self.points:
 			tempR = int(255.0 * m.sqrt(max(0.0, p[0])**2.0+max(0.0,-p[1])**2.0+max(0.0,-p[2])**2.0) )
 			tempG = int(255.0 * m.sqrt(max(0.0,-p[0])**2.0+max(0.0, p[1])**2.0+max(0.0,-p[2])**2.0) )
