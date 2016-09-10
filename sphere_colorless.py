@@ -44,18 +44,43 @@ def drawScore(aScore, aColor):
 	pygame.draw.circle(DISPLAYSURF, aColor, (DISPLAYWIDTH/2+int(aScore),700), 40, 0)
 
 def drawSwatch(aPlayer, aOpponent):
-	pygame.draw.circle(DISPLAYSURF, aOpponent.color, (aPlayer.centerX,aPlayer.centerY-300), 40, 0)
-	pygame.draw.circle(DISPLAYSURF, (aOpponent.color[2],aOpponent.color[0],aOpponent.color[1]), (aPlayer.centerX-50,aPlayer.centerY-250), 10, 0)
-	pygame.draw.circle(DISPLAYSURF, (255.-aOpponent.color[1],255.-aOpponent.color[2],255.-aOpponent.color[0]), (aPlayer.centerX+50,aPlayer.centerY-250), 10, 0)
+#	pygame.draw.circle(DISPLAYSURF, aOpponent.color, (aPlayer.centerX,aPlayer.centerY-300), 40, 0)
+#	pygame.draw.circle(DISPLAYSURF, (aOpponent.color[2],aOpponent.color[0],aOpponent.color[1]), (aPlayer.centerX-50,aPlayer.centerY-250), 10, 0)
+#	pygame.draw.circle(DISPLAYSURF, (255.-aOpponent.color[1],255.-aOpponent.color[2],255.-aOpponent.color[0]), (aPlayer.centerX+50,aPlayer.centerY-250), 10, 0)
+	g1 = (aOpponent.w[2], aOpponent.w[0], aOpponent.w[1])
+	g2 = (-aOpponent.w[1], -aOpponent.w[2], -aOpponent.w[0])
+	x1 = aPlayer.u[0]*g1[0]+aPlayer.u[1]*g1[1]+aPlayer.u[2]*g1[2]
+	y1 = aPlayer.v[0]*g1[0]+aPlayer.v[1]*g1[1]+aPlayer.v[2]*g1[2]
+	z1 = aPlayer.w[0]*g1[0]+aPlayer.w[1]*g1[1]+aPlayer.w[2]*g1[2]
+	x2 = aPlayer.u[0]*g2[0]+aPlayer.u[1]*g2[1]+aPlayer.u[2]*g2[2]
+	y2 = aPlayer.v[0]*g2[0]+aPlayer.v[1]*g2[1]+aPlayer.v[2]*g2[2]
+	z2 = aPlayer.w[0]*g2[0]+aPlayer.w[1]*g2[1]+aPlayer.w[2]*g2[2]
+	if z1 >= 0.0:
+		pygame.draw.circle(DISPLAYSURF, GREEN, (int(200.0*x1+aPlayer.centerX),int(200.0*y1+aPlayer.centerY)), 10, 0)
+	else:
+		pygame.draw.circle(DISPLAYSURF, RED, (int(-200.0*x1+aPlayer.centerX),int(-200.0*y1+aPlayer.centerY)), 10, 0)
+	if z2 >= 0.0:
+		pygame.draw.circle(DISPLAYSURF, GREEN, (int(200.0*x2+aPlayer.centerX),int(200.0*y2+aPlayer.centerY)), 10, 0)
+	else:
+		pygame.draw.circle(DISPLAYSURF, RED, (int(-200.0*x2+aPlayer.centerX),int(-200.0*y2+aPlayer.centerY)), 10, 0)
 
 def drawSphere(aSphere, aP):
 	for i,p in enumerate(aSphere.points):
-		if (aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]) >= 0.0:
+		z = aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]
+		if z >= 0.0:
 			x = aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]
 			y = aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]
-			r = m.sqrt(x**2.0+y**2.0)	#perhaps make this based on z, instead of r
-			pygame.draw.circle(DISPLAYSURF, tuple(1.0*x for x in aSphere.colors[i]), (int(200.0*x+aP.centerX),int(200.0*y+aP.centerY)), int(10*(1.0-(r*r/2.0))), 0)
+			r = m.sqrt(x**2.0+y**2.0)
+			pygame.draw.circle(DISPLAYSURF, GRAY, (int(200.0*x+aP.centerX),int(200.0*y+aP.centerY)), int(10*(1.0-(r*r/2.0))), 0)
 	pygame.draw.circle(DISPLAYSURF, (255.-aP.color[0],255.-aP.color[1],255.-aP.color[2]), (aP.centerX,aP.centerY), 12, 2)
+	xSafe = (aP.u[0]+aP.u[1]+aP.u[2])/1.73
+	ySafe = (aP.v[0]+aP.v[1]+aP.v[2])/1.73
+	rSafe = m.sqrt(xSafe**2.0+ySafe**2.0)
+	zSafe = (aP.w[0]+aP.w[1]+aP.w[2])/1.73
+	if zSafe >= 0.0:
+		pygame.draw.circle(DISPLAYSURF, (150,150,150), (int(200.0*(xSafe)+aP.centerX),int(200.0*(ySafe)+aP.centerY)), int(10*(1.0-(rSafe*rSafe/2.0))), 0)
+	else:
+		pygame.draw.circle(DISPLAYSURF, (150,150,150), (int(200.0*(-xSafe)+aP.centerX),int(200.0*(-ySafe)+aP.centerY)), int(10*(1.0-(rSafe*rSafe/2.0))), 0)
 
 
 def gameloop(aSphere, aPlayer1, aPlayer2):
