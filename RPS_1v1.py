@@ -51,9 +51,9 @@ def drawSphere(aSphere, aP, aO):
 		y = aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]
 		z = aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]
 		if z >= 0.0:
-			foreground.append((x,y,z)+tuple(100+0.0*x for x in aSphere.colors[i]))
+			foreground.append((x,y,z)+tuple(50+0.25*x for x in aSphere.colors[i]))
 		else:
-			background.append((x,y,z)+tuple(100+0.0*x for x in aSphere.colors[i]))
+			background.append((x,y,z)+tuple(50+0.25*x for x in aSphere.colors[i]))
 
 	xSafe = (aP.u[0]+aP.u[1]+aP.u[2])/1.73
 	ySafe = (aP.v[0]+aP.v[1]+aP.v[2])/1.73

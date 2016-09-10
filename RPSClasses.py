@@ -133,9 +133,10 @@ class RPSSphere():
 				q45xy.conjugate()
 				qP.multR(q45xy)
 				self.points.append((qP.comp[1], qP.comp[2], qP.comp[3]))
-		for p in self.points:
+		for p in self.points:	# non-pure colors are not maximally bright, brighten all colors?
 			tempR = int(255.0 * m.sqrt(max(0.0, p[0])**2.0+max(0.0,-p[1])**2.0+max(0.0,-p[2])**2.0) )
 			tempG = int(255.0 * m.sqrt(max(0.0,-p[0])**2.0+max(0.0, p[1])**2.0+max(0.0,-p[2])**2.0) )
 			tempB = int(255.0 * m.sqrt(max(0.0,-p[0])**2.0+max(0.0,-p[1])**2.0+max(0.0, p[2])**2.0) )
-			self.colors.append((tempR,tempG,tempB))
+			ratio = 255/max(tempR, tempG, tempB) #simple attempt at brightening
+			self.colors.append((tempR*ratio,tempG*ratio,tempB*ratio))
 
