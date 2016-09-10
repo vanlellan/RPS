@@ -123,7 +123,16 @@ class RPSSphere():
 		self.colors = []
 		for i,th in enumerate(thetaList):
 			for ph in phiListList[i]:
-				self.points.append((m.cos(ph)*m.sin(th), m.sin(ph)*m.sin(th), m.cos(th)))
+				x = m.cos(ph)*m.sin(th)
+				y = m.sin(ph)*m.sin(th)
+				z = m.cos(th)
+				ang = m.atan(m.sqrt(2.0))
+				q45xy = Quaternion(m.cos(ang/2.0), -m.sin(ang/2.0)/m.sqrt(2.0), m.sin(ang/2.0)/m.sqrt(2.0), 0.0)
+				qP = Quaternion(0.0, x, y, z)
+				qP.multL(q45xy)
+				q45xy.conjugate()
+				qP.multR(q45xy)
+				self.points.append((qP.comp[1], qP.comp[2], qP.comp[3]))
 		for p in self.points:
 			tempR = int(255.0 * m.sqrt(max(0.0, p[0])**2.0+max(0.0,-p[1])**2.0+max(0.0,-p[2])**2.0) )
 			tempG = int(255.0 * m.sqrt(max(0.0,-p[0])**2.0+max(0.0, p[1])**2.0+max(0.0,-p[2])**2.0) )
