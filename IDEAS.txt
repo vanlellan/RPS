@@ -24,6 +24,11 @@ RPS battle system
 		-each player controls two independent spheres: one for attack, one for defense
 		-points can only be scored by attacking
 		-the attacking player's attack vector is compared against the defending player's defense vector
+		NEW WAY TO DO IT:
+		-attack and defense are determined by the same sphere, but the central reticule is split (left/right) (or top/bottom)
+			into an attack reticule and a defense reticule
+		-the angular separation between the two could be fixed, or variable, determined by the player directly, or determined by character gear/modifiers
+		-....you can still sort of park your defense reticule on the safezone, but it is more challenging to do it while moving your attack reticule
 	-angular momentum-
 		-the spheres conserve angular momentum
 		-players control sphere orientation through application of torque
@@ -59,8 +64,13 @@ RPS battle system
 		-gunner (aims the lasers)
 		-tuner (tunes the laser and shield frequencies)
 
-
-
+	-SIMPLE VERSION:
+		-remake asteroids (2D), for two players
+		-changes:
+			-add in strafing
+			-change 'bullet' weapon to beam weapon
+			-beam weapon does instant, constant, long-range damage, low DPS (eventually overheats? pulse instead of beam?)
+			-beam color and shield color are determined by RPS sphere
 
 
 
