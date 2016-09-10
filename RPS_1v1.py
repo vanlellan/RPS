@@ -86,11 +86,12 @@ def drawSphere(aSphere, aP, aO):
 		background.append((x2,y2,z2)+GREEN)
 		foreground.append((-x2,-y2,-z2)+RED)
 
+
 	for p in background:
 		pygame.draw.circle(DISPLAYSURF, p[3:], (int(200.0*p[0]+aP.centerX),int(200.0*p[1]+aP.centerY)), int(2.5*(p[2]+1.0)**2), 0)
 	for p in foreground:
 		pygame.draw.circle(DISPLAYSURF, p[3:], (int(200.0*p[0]+aP.centerX),int(200.0*p[1]+aP.centerY)), int(2.5*(p[2]+1.0)**2), 0)
-
+	
 	pygame.draw.circle(DISPLAYSURF, (255.-aP.color[0],255.-aP.color[1],255.-aP.color[2]), (aP.centerX,aP.centerY), 12, 2)
 
 
@@ -108,29 +109,29 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 					sys.exit()
 		press = pygame.key.get_pressed()
 		if press[K_w]:
-			aPlayer1.rotate(aPlayer1.u, 1.0)
+			aPlayer1.rotate(aPlayer1.u, 1.0, aPlayer1.speed)
 		if press[K_s]:
-			aPlayer1.rotate(aPlayer1.u,-1.0)
+			aPlayer1.rotate(aPlayer1.u,-1.0, aPlayer1.speed)
 		if press[K_d]:
-			aPlayer1.rotate(aPlayer1.v, 1.0)
+			aPlayer1.rotate(aPlayer1.v, 1.0, aPlayer1.speed)
 		if press[K_a]:
-			aPlayer1.rotate(aPlayer1.v,-1.0)
+			aPlayer1.rotate(aPlayer1.v,-1.0, aPlayer1.speed)
 		if press[K_q]:
-			aPlayer1.rotate(aPlayer1.w, 1.0)
+			aPlayer1.rotate(aPlayer1.w, 1.0, aPlayer1.speed)
 		if press[K_e]:
-			aPlayer1.rotate(aPlayer1.w,-1.0)
+			aPlayer1.rotate(aPlayer1.w,-1.0, aPlayer1.speed)
 		if press[K_i]:
-			aPlayer2.rotate(aPlayer2.u, 1.0)
+			aPlayer2.rotate(aPlayer2.u, 1.0, aPlayer2.speed)
 		if press[K_k]:
-			aPlayer2.rotate(aPlayer2.u,-1.0)
+			aPlayer2.rotate(aPlayer2.u,-1.0, aPlayer2.speed)
 		if press[K_l]:
-			aPlayer2.rotate(aPlayer2.v, 1.0)
+			aPlayer2.rotate(aPlayer2.v, 1.0, aPlayer2.speed)
 		if press[K_j]:
-			aPlayer2.rotate(aPlayer2.v,-1.0)
+			aPlayer2.rotate(aPlayer2.v,-1.0, aPlayer2.speed)
 		if press[K_u]:
-			aPlayer2.rotate(aPlayer2.w, 1.0)
+			aPlayer2.rotate(aPlayer2.w, 1.0, aPlayer2.speed)
 		if press[K_o]:
-			aPlayer2.rotate(aPlayer2.w,-1.0)
+			aPlayer2.rotate(aPlayer2.w,-1.0, aPlayer2.speed)
 		aPlayer1.calcColor()
 		aPlayer2.calcColor()
 		SCORE -= 1.0*attack(aPlayer1,aPlayer2)
@@ -146,14 +147,14 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 			drawScore(SCORE,scoreColor)
 			pygame.display.update()
 			time.sleep(2.0)
-			aPlayer1.reset()
-			aPlayer2.reset()
+			aPlayer1.reset(1.0)
+			aPlayer2.reset(-1.0)
 			SCORE = 0.0
 			scoreColor = (255,255,255)
 		time.sleep(0.02)
 
-player1 = RPSPlayer(300,400)
-player2 = RPSPlayer(900,400)
+player1 = RPSPlayer(300,400,1.0)
+player2 = RPSPlayer(900,400,-1.0)
 sphere1 = RPSSphere()
 gameloop(sphere1,player1,player2)
 

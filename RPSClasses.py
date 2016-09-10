@@ -63,20 +63,23 @@ class RPSDummy():
 
 class RPSPlayer():
 	#notes:
-	def __init__(self,aX,aY):
+	def __init__(self,aX,aY,sign):
 		self.centerX = aX
 		self.centerY = aY
-		self.u = [1.0,0.0,0.0]
-		self.v = [0.0,1.0,0.0]
-		self.w = [0.0,0.0,1.0]
-		self.scalarSpeed = m.cos(0.05/2.0)
-		self.vectorSpeed = m.sin(0.05/2.0)
+		sign = float(sign)/abs(sign)
+		self.u = [sign,0.0,0.0]
+		self.v = [0.0,sign,0.0]
+		self.w = [0.0,0.0,sign]
+		self.speed = 0.05
 		self.calcColor()
+		self.rotate((-1.0/m.sqrt(2.0),1.0/m.sqrt(2.0),0.0), 1.0, m.atan(m.sqrt(2.0)))
 
-	def reset(self):
-		self.u = [1.0,0.0,0.0]
-		self.v = [0.0,1.0,0.0]
-		self.w = [0.0,0.0,1.0]
+	def reset(self,sign):
+		sign = float(sign)/abs(sign)
+		self.u = [sign,0.0,0.0]
+		self.v = [0.0,sign,0.0]
+		self.w = [0.0,0.0,sign]
+		self.rotate((-1.0/m.sqrt(2.0),1.0/m.sqrt(2.0),0.0), 1.0, m.atan(m.sqrt(2.0)))
 
 	def calcColor(self):
 		tempR = int(255.0 * m.sqrt(max(0.0, self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0,-self.w[2])**2.0) )
@@ -84,8 +87,10 @@ class RPSPlayer():
 		tempB = int(255.0 * m.sqrt(max(0.0,-self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0, self.w[2])**2.0) )
 		self.color = (tempR,tempG,tempB)
 
-	def rotate(self,axis,spin):
-		q = Quaternion(self.scalarSpeed, spin*axis[0]*self.vectorSpeed, spin*axis[1]*self.vectorSpeed, spin*axis[2]*self.vectorSpeed)
+	def rotate(self,axis,spin,theta):
+		a = m.cos(theta/2.0)
+		b = m.sin(theta/2.0)
+		q = Quaternion(a, spin*axis[0]*b, spin*axis[1]*b, spin*axis[2]*b)
 		uQ = Quaternion(0.0, self.u[0], self.u[1], self.u[2])
 		uQ.multL(q)
 		q.conjugate()
