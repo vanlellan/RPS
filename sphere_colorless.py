@@ -146,14 +146,14 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 			drawScore(SCORE,scoreColor)
 			pygame.display.update()
 			time.sleep(2.0)
-			aPlayer1.reset()
-			aPlayer2.reset()
+			aPlayer1.reset(1.0)
+			aPlayer2.reset(-1.0)
 			SCORE = 0.0
 			scoreColor = (255,255,255)
 		time.sleep(0.02)
 
-player1 = RPSPlayer(300,400)
-player2 = RPSPlayer(900,400)
+player1 = RPSPlayer(300,400,1.0)
+player2 = RPSPlayer(900,400,-1.0)
 sphere1 = RPSSphere()
 gameloop(sphere1,player1,player2)
 
