@@ -50,11 +50,10 @@ def drawSwatch(aPlayer, aOpponent):
 
 def drawSphere(aSphere, aP):
 	for i,p in enumerate(aSphere.points):
-		if (aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]) >= 0.0:
-			x = aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]
-			y = aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]
-			r = m.sqrt(x**2.0+y**2.0)	#perhaps make this based on z, instead of r
-			pygame.draw.circle(DISPLAYSURF, tuple(1.0*x for x in aSphere.colors[i]), (int(200.0*x+aP.centerX),int(200.0*y+aP.centerY)), int(10*(1.0-(r*r/2.0))), 0)
+		z = aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]
+		x = aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]
+		y = aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]
+		pygame.draw.circle(DISPLAYSURF, tuple(1.0*x for x in aSphere.colors[i]), (int(200.0*x+aP.centerX),int(200.0*y+aP.centerY)), int(2.5*(z+1.0)**2), 0)
 	pygame.draw.circle(DISPLAYSURF, (255.-aP.color[0],255.-aP.color[1],255.-aP.color[2]), (aP.centerX,aP.centerY), 12, 2)
 
 
@@ -112,14 +111,14 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 			drawScore(SCORE,scoreColor)
 			pygame.display.update()
 			time.sleep(2.0)
-			aPlayer1.reset()
-			aPlayer2.reset()
+			aPlayer1.reset(1.0)
+			aPlayer2.reset(-1.0)
 			SCORE = 0.0
 			scoreColor = (255,255,255)
 		time.sleep(0.02)
 
-player1 = RPSPlayer(300,400)
-player2 = RPSPlayer(900,400)
+player1 = RPSPlayer(300,400,1.0)
+player2 = RPSPlayer(900,400,-1.0)
 sphere1 = RPSSphere()
 gameloop(sphere1,player1,player2)
 
