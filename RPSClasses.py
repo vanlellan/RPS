@@ -67,7 +67,7 @@ class RPSPlayer():
 		self.centerX = aX
 		self.centerY = aY
 		sign = float(sign)/abs(sign)
-		self.u = [sign,0.0,0.0]
+		self.u = [1.0,0.0,0.0]
 		self.v = [0.0,sign,0.0]
 		self.w = [0.0,0.0,sign]
 		self.speed = 0.05
