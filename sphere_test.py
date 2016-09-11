@@ -49,11 +49,20 @@ def drawSwatch(aPlayer, aOpponent):
 	pygame.draw.circle(DISPLAYSURF, (255.-aOpponent.color[1],255.-aOpponent.color[2],255.-aOpponent.color[0]), (aPlayer.centerX+50,aPlayer.centerY-250), 10, 0)
 
 def drawSphere(aSphere, aP):
+	foreground = []
+	background = []
 	for i,p in enumerate(aSphere.points):
 		z = aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]
 		x = aP.u[0]*p[0]+aP.u[1]*p[1]+aP.u[2]*p[2]
 		y = aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]
-		pygame.draw.circle(DISPLAYSURF, tuple(1.0*x for x in aSphere.colors[i]), (int(200.0*x+aP.centerX),int(200.0*y+aP.centerY)), int(2.5*(z+1.0)**2), 0)
+		if z >= 0.0:
+			foreground.append((x,y,z)+tuple(1.0*x for x in aSphere.colors[i]))
+		else:
+			background.append((x,y,z)+tuple(1.0*x for x in aSphere.colors[i]))
+	for p in background:
+		pygame.draw.circle(DISPLAYSURF, p[3:], (int(200.0*p[0]+aP.centerX),int(200.0*p[1]+aP.centerY)), int(2.5*(p[2]+1.0)**2), 0)
+	for p in foreground:
+		pygame.draw.circle(DISPLAYSURF, p[3:], (int(200.0*p[0]+aP.centerX),int(200.0*p[1]+aP.centerY)), int(2.5*(p[2]+1.0)**2), 0)
 	pygame.draw.circle(DISPLAYSURF, (255.-aP.color[0],255.-aP.color[1],255.-aP.color[2]), (aP.centerX,aP.centerY), 12, 2)
 
 
