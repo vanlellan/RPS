@@ -180,7 +180,6 @@ class RPSPlayerInertia():
 		uLimited = 0.05*self.uVelocity/(0.04+abs(self.uVelocity))
 		vLimited = 0.05*self.vVelocity/(0.04+abs(self.vVelocity))
 		wLimited = 0.05*self.wVelocity/(0.04+abs(self.wVelocity))
-		print uLimited, vLimited, wLimited
 		self.rotate(self.u,1.0,uLimited)
 		self.rotate(self.v,1.0,vLimited)
 		self.rotate(self.w,1.0,wLimited)
