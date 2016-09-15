@@ -11,12 +11,12 @@
 #	make colorless version: draw win-maximization and loss-maximization points on the sphere itself
 
 #RPS_Inertia.py TO-DO:
-#	needs speed limit
+#DONE	needs speed limit
 #	needs friction and brake
 #	needs normalization and orthogonality checks
 #		automatic re-orthonormalization
 #	needs color domain checking (might happen automatically with normalization checking...)
-
+#	make speed limit apply to vector speed, not individual component speed
 
 import pygame, sys
 from pygame.locals import *
@@ -127,6 +127,10 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 			aPlayer1.wVelocity += 0.01
 		if press[K_e]:
 			aPlayer1.wVelocity += -0.01
+		if press[K_f]:
+			aPlayer1.uVelocity += -0.1*aPlayer1.uVelocity
+			aPlayer1.vVelocity += -0.1*aPlayer1.vVelocity
+			aPlayer1.wVelocity += -0.1*aPlayer1.wVelocity
 		if press[K_i]:
 			aPlayer2.uVelocity += 0.01
 		if press[K_k]:
@@ -139,6 +143,10 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 			aPlayer2.wVelocity += 0.01
 		if press[K_o]:
 			aPlayer2.wVelocity += -0.01
+		if press[K_h]:
+			aPlayer2.uVelocity += -0.1*aPlayer2.uVelocity
+			aPlayer2.vVelocity += -0.1*aPlayer2.vVelocity
+			aPlayer2.wVelocity += -0.1*aPlayer2.wVelocity
 		aPlayer1.timestep()
 		aPlayer2.timestep()
 		aPlayer1.calcColor()
