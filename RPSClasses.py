@@ -148,6 +148,7 @@ class RPSSphere():
 class RPSPlayerInertia():
 	#notes:
 	def __init__(self,aX,aY,sign):
+		self.points = 0
 		self.centerX = aX
 		self.centerY = aY
 		sign = float(sign)/abs(sign)

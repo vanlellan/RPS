@@ -12,11 +12,12 @@
 
 #RPS_Inertia.py TO-DO:
 #DONE	needs speed limit
-#	needs friction and brake
+#DONE	needs friction and brake
 #	needs normalization and orthogonality checks
 #		automatic re-orthonormalization
 #	needs color domain checking (might happen automatically with normalization checking...)
 #	make speed limit apply to vector speed, not individual component speed
+#	add score counter
 
 import pygame, sys
 from pygame.locals import *
@@ -47,8 +48,8 @@ def attack(aP1, aP2):
 	result = aP1.w[0]*(aP2.w[2]-aP2.w[1]) + aP1.w[1]*(aP2.w[0]-aP2.w[2]) + aP1.w[2]*(aP2.w[1]-aP2.w[0])
 	return result
 
-def drawScore(aScore, aColor):
-	pygame.draw.circle(DISPLAYSURF, aColor, (DISPLAYWIDTH/2+int(aScore),700), 40, 0)
+def drawRope(aRope, aColor):
+	pygame.draw.circle(DISPLAYSURF, aColor, (DISPLAYWIDTH/2+int(aRope),700), 40, 0)
 
 def drawSphere(aSphere, aP, aO):
 	background = []
@@ -101,10 +102,16 @@ def drawSphere(aSphere, aP, aO):
 	
 	pygame.draw.circle(DISPLAYSURF, (255.-aP.color[0],255.-aP.color[1],255.-aP.color[2]), (aP.centerX,aP.centerY), 12, 2)
 
+def drawPoints(aP1, aP2):
+	for i in range(aP1.points):
+		pygame.draw.circle(DISPLAYSURF, WHITE, (aP1.centerX-250+i*25,aP1.centerY-250), 10, 0)
+	for j in range(aP2.points):
+		pygame.draw.circle(DISPLAYSURF, WHITE, (aP2.centerX+250-j*25,aP2.centerY-250), 10, 0)
+		
 
 def gameloop(aSphere, aPlayer1, aPlayer2):
-	SCORE = 0.0
-	scoreColor = (255,255,255)
+	ROPE = 0.0
+	ropeColor = (255,255,255)
 	while True:
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -151,23 +158,28 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 		aPlayer2.timestep()
 		aPlayer1.calcColor()
 		aPlayer2.calcColor()
-		SCORE -= 1.0*attack(aPlayer1,aPlayer2)
+		ROPE -= 1.0*attack(aPlayer1,aPlayer2)
 		DISPLAYSURF.fill(BLACK)
 		drawSphere(aSphere, aPlayer1, aPlayer2)
 		drawSphere(aSphere, aPlayer2, aPlayer1)
 		pygame.draw.circle(DISPLAYSURF, GREEN, (aPlayer1.centerX,700), 45, 5)
 		pygame.draw.circle(DISPLAYSURF, GREEN, (aPlayer2.centerX,700), 45, 5)
-		drawScore(SCORE,scoreColor)
+		drawRope(ROPE,ropeColor)
+		drawPoints(aPlayer1, aPlayer2)
 		pygame.display.update()
-		if SCORE > 300 or SCORE < -300:
-			scoreColor = (0,255,0)
-			drawScore(SCORE,scoreColor)
+		if ROPE > 300 or ROPE < -300:
+			ropeColor = (0,255,0)
+			drawRope(ROPE,ropeColor)
 			pygame.display.update()
+			if ROPE > 0.0:
+				aPlayer2.points += 1
+			else:
+				aPlayer1.points += 1
 			time.sleep(2.0)
 			aPlayer1.reset(1.0)
 			aPlayer2.reset(-1.0)
-			SCORE = 0.0
-			scoreColor = (255,255,255)
+			ROPE = 0.0
+			ropeColor = (255,255,255)
 		time.sleep(0.02)
 
 player1 = RPSPlayerInertia(300,400,1.0)
