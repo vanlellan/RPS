@@ -154,6 +154,12 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 			aPlayer2.uVelocity += -0.1*aPlayer2.uVelocity
 			aPlayer2.vVelocity += -0.1*aPlayer2.vVelocity
 			aPlayer2.wVelocity += -0.1*aPlayer2.wVelocity
+		aPlayer1.uVelocity += -0.01*aPlayer1.uVelocity
+		aPlayer1.vVelocity += -0.01*aPlayer1.vVelocity
+		aPlayer1.wVelocity += -0.01*aPlayer1.wVelocity
+		aPlayer2.uVelocity += -0.01*aPlayer2.uVelocity
+		aPlayer2.vVelocity += -0.01*aPlayer2.vVelocity
+		aPlayer2.wVelocity += -0.01*aPlayer2.wVelocity
 		aPlayer1.timestep()
 		aPlayer2.timestep()
 		aPlayer1.calcColor()

@@ -72,5 +72,11 @@ RPS battle system
 			-beam weapon does instant, constant, long-range damage, low DPS (eventually overheats? pulse instead of beam?)
 			-beam color and shield color are determined by RPS sphere
 
-
-
+	-MINIMAL RPS GAME OF LIFE:
+		-all live squares have an RGB color
+		-each step, all live squares battle all live neighbors. The sum of the outcomes determines if the square lives or dies
+		-each step, all dead squares search pairs of live neighbors for those with 'enough overlap' in their RGB values (i.e. dot product)
+			-if so, the dead square becomes live next round, somehow taking RGB colors from both parents
+		-alternative: Asexual reproduction
+			-at each death, the neighbor that dealt the most damage clones itself to replace the dying square
+			-cloning is imperfect, mutations can occur
