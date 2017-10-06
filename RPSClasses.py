@@ -1,5 +1,6 @@
 #Classes for RPS games: Quaternion, RPSPlayer, RPSSphere
 import math as m
+import numpy as np
 import random as r
 
 class Quaternion():
@@ -213,4 +214,48 @@ class RPSPlayerInertia():
 		self.w[0] = wQ.comp[1]
 		self.w[1] = wQ.comp[2]
 		self.w[2] = wQ.comp[3]
+
+class RPSNeuralInertia(RPSPlayerInertia):
+	def __init__(self,aX,aY,sign):
+		RPSPlayerInertia.__init__(self,aX,aY,sign)
+		self.M1 = np.random.rand(16,6) - 0.5
+		self.B1 = np.random.rand(16,1) - 0.5*6
+		self.M2 = np.random.rand(7,16) - 0.5
+		self.B2 = np.random.rand(7,1) - 0.5*16
+		self.B3 = np.random.rand(7,1) - 0.5
+		self.press = [0,0,0,0,0,0,0]
+
+	def timestep(self):
+		self.uVelocity += 0.01*(self.press[0] - self.press[1])
+		self.vVelocity += 0.01*(self.press[2] - self.press[3])
+		self.wVelocity += 0.01*(self.press[4] - self.press[5])
+		magSpeed = m.sqrt(self.uVelocity**2.0 + self.vVelocity**2.0 + self.wVelocity**2.0)
+		uLimited = 0.05*self.uVelocity/(0.04+magSpeed)
+		vLimited = 0.05*self.vVelocity/(0.04+magSpeed)
+		wLimited = 0.05*self.wVelocity/(0.04+magSpeed)
+		self.rotate(self.u,1.0,uLimited)
+		self.rotate(self.v,1.0,vLimited)
+		self.rotate(self.w,1.0,wLimited)
+
+	def brain(self, opponentColor):
+		# nrow x ncol
+		# I  is 6x1
+		# O  is 7x1
+		# H  is 16x1
+		# M1 is 16x6
+		# B1 is 16x1
+		# M2 is 7x16
+		# B2 is 7x1
+		# B3 is 7x1
+		I = np.array([float(x)/255. for x in self.color+opponentColor]).reshape(6,1)
+		H = 1.0/(1.0+np.exp(-(np.dot(self.M1,I)+self.B1)))
+		O = 1.0/(1.0+np.exp(-(np.dot(self.M2,H)+self.B2)))
+		O = 0.5 * (np.sign(O+self.B3) + 1.0)
+		self.press = [x for x in O.reshape(7)]
+		print self.u
+		print self.v
+		print self.w
+
+
+
 

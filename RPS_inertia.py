@@ -16,8 +16,8 @@
 #	needs normalization and orthogonality checks
 #		automatic re-orthonormalization
 #	needs color domain checking (might happen automatically with normalization checking...)
-#	make speed limit apply to vector speed, not individual component speed
-#	add score counter
+#DONE	make speed limit apply to vector speed, not individual component speed
+#DONE	add score counter
 
 import pygame, sys
 from pygame.locals import *
@@ -160,6 +160,7 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 		aPlayer2.uVelocity += -0.01*aPlayer2.uVelocity
 		aPlayer2.vVelocity += -0.01*aPlayer2.vVelocity
 		aPlayer2.wVelocity += -0.01*aPlayer2.wVelocity
+		aPlayer2.brain(aPlayer1.color)
 		aPlayer1.timestep()
 		aPlayer2.timestep()
 		aPlayer1.calcColor()
@@ -189,7 +190,8 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 		time.sleep(0.02)
 
 player1 = RPSPlayerInertia(300,400,1.0)
-player2 = RPSPlayerInertia(900,400,-1.0)
+#player2 = RPSPlayerInertia(900,400,-1.0)
+player2 = RPSNeuralInertia(900,400,-1.0)
 sphere1 = RPSSphere()
 gameloop(sphere1,player1,player2)
 
