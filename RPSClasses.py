@@ -2,6 +2,7 @@
 import math as m
 import numpy as np
 import random as r
+import pickle
 
 class Quaternion():
 	#notes:
@@ -225,8 +226,26 @@ class RPSNeuralInertia(RPSPlayerInertia):
 		self.B2 = 2.0*self.NNdim[1]*np.random.rand(self.NNdim[2],1) - 1.0*self.NNdim[1]
 		self.B3 = 2.0*np.random.rand(self.NNdim[2],1) - 1.0
 		self.press = np.zeros(self.NNdim[2])
+		self.histLen = 1000
+		self.myHist = np.zeros(self.histLen, dtype=(int,3))	#combine these into one length=6 tuple
+		self.opHist = np.zeros(self.histLen, dtype=(int,3))	#combine these into one length=6 tuple
+		self.stepCount = 0
 
 	def timestep(self):
+		self.stepCount += 1
+		if self.stepCount == self.histLen:
+			self.stepCount = 0
+			#pickle myHist and opHist and save as a file
+			with open("aiHist.pickle","wb") as pickleFile:
+				pickle.dump(self.myHist, pickleFile, protocol=pickle.HIGHEST_PROTOCOL)
+			with open("pcHist.pickle","wb") as pickleFile:
+				pickle.dump(self.opHist, pickleFile, protocol=pickle.HIGHEST_PROTOCOL)
+
+# temporarily saved for ease: how to read the pickeled data 
+#	with open("tags.pickle","rb") as pickleFile:
+#		tagDict = pickle.load(pickleFile)
+
+			print "Game Histories Saved and Reset."
 		self.uVelocity += 0.01*(self.press[0] - self.press[1])
 		self.vVelocity += 0.01*(self.press[2] - self.press[3])
 		self.wVelocity += 0.01*(self.press[4] - self.press[5])
@@ -239,6 +258,10 @@ class RPSNeuralInertia(RPSPlayerInertia):
 		self.rotate(self.w,1.0,wLimited)
 
 	def brain(self, opponentColor):
+		#self.myHist = np.concatenate((self.myHist[1:], [self.color]), axis=0)
+		#self.opHist = np.concatenate((self.opHist[1:], [opponentColor]), axis=0)
+		self.myHist[self.stepCount] = self.color
+		self.myHist[self.stepCount] = opponentColor
 		# nrow x ncol
 		# I  is 6x1
 		# O  is 7x1

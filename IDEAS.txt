@@ -20,10 +20,20 @@ RPS battle system
 		-e.g. 0 points: 0.0-0.5, 1 point: 0.5-0.9, 2 points, 0.9-1.0
 	-AI-
 		-It would be quite fun to try to write an optimal AI for this game
-		-use a simple neural net (~few inputs are coordinates of player for past few steps, seven outputs: up,down,left,right,cw,ccw,brake, perhaps just one hidden layer?)
+		-use a simple neural net (~few inputs are coordinates of player for past few steps, seven outputs: up,down,left,right,cw,ccw,brake,
+		-perhaps just one hidden layer?)
+		-this may 'optimize' to: "The only winning move is not to play." (i.e. AI remains on Safe Point)
 		-use two neural nets, independently trained and then linked back-to-front. 
 			-the 'front-end' neural net reads in the opponent's RGB position, and calculates the optimal countering position (this is easy to calculate by hand)
 			-the 'back-end' neural net takes the optimal position and current position and orientation, and outputs button presses (this is harder....)
+		-Active Learning AI-
+			-for each timestep, compute the 'distance' between the two players
+			-for each point, compute the integrated distance (sum of all instantaneous distances). Positive for AI win, negative for PC win
+			-after each point replay history of previous point with slighty modified neural net parameters
+				-one point is probably too long, need to do evaluation on small chunks of time
+				-every n timesteps, replay the past n timesteps and make gradient descent step
+				-n must be small enough that AI behavior change would not be 'noticed' by the PC
+			-choose replay with most favorable outcome, modify 'live' NN parameters
 	-Separate attack/defense-  SAFE ZONES MAKE THIS A BAD IDEA
 		-each player controls two independent spheres: one for attack, one for defense
 		-points can only be scored by attacking
