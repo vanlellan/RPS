@@ -21,6 +21,9 @@ RPS battle system
 	-AI-
 		-It would be quite fun to try to write an optimal AI for this game
 		-use a simple neural net (~few inputs are coordinates of player for past few steps, seven outputs: up,down,left,right,cw,ccw,brake, perhaps just one hidden layer?)
+		-use two neural nets, independently trained and then linked back-to-front. 
+			-the 'front-end' neural net reads in the opponent's RGB position, and calculates the optimal countering position (this is easy to calculate by hand)
+			-the 'back-end' neural net takes the optimal position and current position and orientation, and outputs button presses (this is harder....)
 	-Separate attack/defense-  SAFE ZONES MAKE THIS A BAD IDEA
 		-each player controls two independent spheres: one for attack, one for defense
 		-points can only be scored by attacking

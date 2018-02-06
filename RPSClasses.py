@@ -248,16 +248,16 @@ class RPSNeuralInertia(RPSPlayerInertia):
 		# M2 is 7x16
 		# B2 is 7x1
 		# B3 is 7x1
-		print "POOP"
+	#	print "POOP"
 		I = np.array([float(x)/255. for x in self.u+self.v+self.w+list(opponentColor)]).reshape(self.NNdim[0],1)
-		print I.reshape(12)
+	#	print I.reshape(12)
 		H = 1.0/(1.0+np.exp(-(np.dot(self.M1,I)+self.B1)))
-		print H.reshape(16)
+	#	print H.reshape(16)
 		O = 1.0/(1.0+np.exp(-(np.dot(self.M2,H)+self.B2)))
-		print O.reshape(7)
+	#	print O.reshape(7)
 		O = 0.5 * (np.sign(O+self.B3) + 1.0)
 		self.press = O.reshape(self.NNdim[2])
-		print self.press
+	#	print self.press
 
 
 
