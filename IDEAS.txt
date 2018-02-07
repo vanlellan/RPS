@@ -18,6 +18,10 @@ RPS battle system
 	-Discrete scoring-
 		-points are integer valued, with pre-defined ranges for vector comparison output
 		-e.g. 0 points: 0.0-0.5, 1 point: 0.5-0.9, 2 points, 0.9-1.0
+	-Target Optimal Point-
+		-show the current optimal position (anti-optimal position) with a green (red) dot, surrounded by a green (red) ring
+		-the diameter of the ring indicates potential damage strength (small diameter means high damage, max diameter means no damage)
+		-this would replace the current 'two points' target painting
 	-AI-
 		-It would be quite fun to try to write an optimal AI for this game
 		-use a simple neural net (~few inputs are coordinates of player for past few steps, seven outputs: up,down,left,right,cw,ccw,brake,

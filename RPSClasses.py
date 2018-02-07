@@ -263,24 +263,26 @@ class RPSNeuralInertia(RPSPlayerInertia):
 		self.myHist[self.stepCount] = self.color
 		self.myHist[self.stepCount] = opponentColor
 		# nrow x ncol
-		# I  is 6x1
-		# O  is 7x1
-		# H  is 16x1
-		# M1 is 16x6
-		# B1 is 16x1
-		# M2 is 7x16
-		# B2 is 7x1
-		# B3 is 7x1
-	#	print "POOP"
+		# I  is 12x1	--input layer of nodes
+		# O  is 7x1	--output layer of nodes
+		# H  is 16x1	--hidden layer of nodes
+		# M1 is 16x12	--weight matrix between I and H
+		# B1 is 16x1	--bias applied when filling H
+		# M2 is 7x16	--weight matrix between H and O
+		# B2 is 7x1	--bias applied when filling O
+		# B3 is 7x1	--bias applied when thresholding O
+		# Total number of fit parameters = 334
+			#need to input both opponent position and self position and orientation
+			#alternatively, calculate opponent relative position and use that as NN input
 		I = np.array([float(x)/255. for x in self.u+self.v+self.w+list(opponentColor)]).reshape(self.NNdim[0],1)
 	#	print I.reshape(12)
 		H = 1.0/(1.0+np.exp(-(np.dot(self.M1,I)+self.B1)))
 	#	print H.reshape(16)
 		O = 1.0/(1.0+np.exp(-(np.dot(self.M2,H)+self.B2)))
-	#	print O.reshape(7)
+	#	print "O     = ", O.reshape(7)
 		O = 0.5 * (np.sign(O+self.B3) + 1.0)
 		self.press = O.reshape(self.NNdim[2])
-	#	print self.press
+	#	print "press = ", self.press
 
 
 
