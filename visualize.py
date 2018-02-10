@@ -65,8 +65,8 @@ def attack4D(a, b):
 	B1 =  b[0]/1.4 + b[1]*0.0 - b[2]/2.0
 	B2 =  b[0]*0.0 - b[1]/1.4 + b[2]/2.0
 	B3 = -b[0]/1.4 + b[1]*0.0 - b[2]/2.0
-	#result = A0*(B3-B1) + A1*(B0-B2) + A2*(B1-B3) + A3*(B2-B0)
-	result = A0*(B2-B1) + A1*(B3-B2) + A2*(B0-B3) + A3*(B1-B0)
+	#result = A0*(B3-B1) + A1*(B0-B2) + A2*(B1-B3) + A3*(B2-B0)	#	M = [[0,-1,0,1][1,0,-1,0][0,1,0,-1][-1,0,1,0]]
+	result = A0*(B2-B1) + A1*(B3-B2) + A2*(B0-B3) + A3*(B1-B0)	#	M = [[0,-1,1,0][0,0,-1,1][1,0,0,-1][-1,1,0,0]]
 	return result
 
 def drawSphere(aSphere, aP, aO):
@@ -78,7 +78,8 @@ def drawSphere(aSphere, aP, aO):
 		y = aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]
 		z = aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]
 		r = 1.0# - 0.5*abs(p[0]/m.sqrt(3)+p[1]/m.sqrt(3)+p[2]/m.sqrt(3))
-		comp = attack4D(p,aO.w)
+		#comp = attack4D(p,aO.w)
+		comp = attack2(p,aO.w)
 		if z >= 0.0:
 		#	foreground.append((r*x,r*y,r*z)+tuple(50+0.25*x for x in aSphere.colors[i])+(0.5,))
 			if comp > 0.0:
