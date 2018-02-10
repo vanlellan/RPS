@@ -82,12 +82,13 @@ def drawSphere(aSphere, aP, aO):
 		comp = attack2(p,aO.w)
 		if z >= 0.0:
 		#	foreground.append((r*x,r*y,r*z)+tuple(50+0.25*x for x in aSphere.colors[i])+(0.5,))
-			if comp > 0.0:
-				foreground.append((r*x,r*y,r*z)+tuple(max(0,min(255,int(0.5*a*comp))) for a in GREEN)+(0.5,))
-			else:
-				foreground.append((r*x,r*y,r*z)+tuple(max(0,min(255,int(-0.5*a*comp))) for a in RED)+(0.5,))
+			foreground.append((r*x,r*y,r*z)+tuple(max(0,min(255,int(0.5*a*abs(comp)))) for a in aSphere.colors[i])+(1.0,))
+		#	if comp > 0.0:
+		#		foreground.append((r*x,r*y,r*z)+tuple(max(0,min(255,int(0.5*a*comp))) for a in GREEN)+(0.5,))
+		#	else:
+		#		foreground.append((r*x,r*y,r*z)+tuple(max(0,min(255,int(-0.5*a*comp))) for a in RED)+(0.5,))
 		else:
-			background.append((r*x,r*y,r*z)+tuple(50+0.25*x for x in aSphere.colors[i])+(0.5,))
+			background.append((r*x,r*y,r*z)+tuple(50+0.25*x for x in aSphere.colors[i])+(1.0,))
 
 	xSafe = (aP.u[0]+aP.u[1]+aP.u[2])/1.73
 	ySafe = (aP.v[0]+aP.v[1]+aP.v[2])/1.73
@@ -163,15 +164,15 @@ def drawSphere(aSphere, aP, aO):
 #		background.append((x2,y2,z2)+GREEN+(1.0,))
 #		foreground.append((-x2,-y2,-z2)+RED+(1.0,))
 	if z3 >= 0.0:
-		foreground.append((x3,y3,z3)+GREEN+(2.0,))
-		background.append((-x3,-y3,-z3)+RED+(2.0,))
+		foreground.append((x3,y3,z3)+GREEN+(1.0,))
+		background.append((-x3,-y3,-z3)+RED+(1.0,))
 	else:
-		background.append((x3,y3,z3)+GREEN+(2.0,))
-		foreground.append((-x3,-y3,-z3)+RED+(2.0,))
+		background.append((x3,y3,z3)+GREEN+(1.0,))
+		foreground.append((-x3,-y3,-z3)+RED+(1.0,))
 	if z4 >= 0.0:
-		foreground.append((x4,y4,z4)+YELLOW+(2.0,))
+		foreground.append((x4,y4,z4)+YELLOW+(0.5,))
 	else:
-		background.append((x4,y4,z4)+YELLOW+(2.0,))
+		background.append((x4,y4,z4)+YELLOW+(0.5,))
 
 	for p in range(50):
 		tempG = rotate3Vector((x1,y1,z1), (x3,y3,z3), p*2.0*m.pi/50.)
