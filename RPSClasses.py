@@ -4,6 +4,9 @@ import numpy as np
 import random as r
 import pickle
 
+#I really need to go back and rewrite the basic player class. The inertia class would inherit from it. Turning on the Neural Control would be a switch.
+
+
 class Quaternion():
 	#notes:
 	# x  1  i  j  k
@@ -36,7 +39,6 @@ class Quaternion():
 		new[3] = aOther.comp[0]*self.comp[3] + aOther.comp[1]*self.comp[2] - aOther.comp[2]*self.comp[1] + aOther.comp[3]*self.comp[0]
 		self.comp = new
 
-
 class RPSDummy():
 	#notes
 	def __init__(self):
@@ -62,60 +64,6 @@ class RPSDummy():
 	#	A = m.cos(m.pi/4.0)
 	#	B = m.sin(m.pi/4.0)
 	#	q = Quaternion(A,B*wXz[0],B*wXz[1],B*wXz[2])
-
-class RPSPlayer():
-	#notes:
-	def __init__(self,aX,aY,sign):
-		self.centerX = aX
-		self.centerY = aY
-		sign = float(sign)/abs(sign)
-		self.u = [1.0,0.0,0.0]
-		self.v = [0.0,sign,0.0]
-		self.w = [0.0,0.0,sign]
-		self.speed = 0.05
-		self.calcColor()
-		self.rotate((-1.0/m.sqrt(2.0),1.0/m.sqrt(2.0),0.0), 1.0, m.atan(m.sqrt(2.0)))
-
-	def reset(self,sign):
-		sign = float(sign)/abs(sign)
-		self.u = [1.0,0.0,0.0]
-		self.v = [0.0,sign,0.0]
-		self.w = [0.0,0.0,sign]
-		self.rotate((-1.0/m.sqrt(2.0),1.0/m.sqrt(2.0),0.0), 1.0, m.atan(m.sqrt(2.0)))
-
-	def calcColor(self):
-		tempR = int(255.0 * m.sqrt(max(0.0, self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0,-self.w[2])**2.0) )
-		tempG = int(255.0 * m.sqrt(max(0.0,-self.w[0])**2.0+max(0.0, self.w[1])**2.0+max(0.0,-self.w[2])**2.0) )
-		tempB = int(255.0 * m.sqrt(max(0.0,-self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0, self.w[2])**2.0) )
-		self.color = (tempR,tempG,tempB)
-
-	def rotate(self,axis,spin,theta):
-		a = m.cos(theta/2.0)
-		b = m.sin(theta/2.0)
-		q = Quaternion(a, spin*axis[0]*b, spin*axis[1]*b, spin*axis[2]*b)
-		uQ = Quaternion(0.0, self.u[0], self.u[1], self.u[2])
-		uQ.multL(q)
-		q.conjugate()
-		uQ.multR(q)
-		self.u[0] = uQ.comp[1]
-		self.u[1] = uQ.comp[2]
-		self.u[2] = uQ.comp[3]
-		vQ = Quaternion(0.0, self.v[0], self.v[1], self.v[2])
-		q.conjugate()
-		vQ.multL(q)
-		q.conjugate()
-		vQ.multR(q)
-		self.v[0] = vQ.comp[1]
-		self.v[1] = vQ.comp[2]
-		self.v[2] = vQ.comp[3]
-		wQ = Quaternion(0.0, self.w[0], self.w[1], self.w[2])
-		q.conjugate()
-		wQ.multL(q)
-		q.conjugate()
-		wQ.multR(q)
-		self.w[0] = wQ.comp[1]
-		self.w[1] = wQ.comp[2]
-		self.w[2] = wQ.comp[3]
 
 class RPSSphere():
 	#notes:
@@ -147,7 +95,7 @@ class RPSSphere():
 			ratio = 255/max(tempR, tempG, tempB) #simple attempt at brightening
 			self.colors.append((tempR*ratio,tempG*ratio,tempB*ratio))
 
-class RPSPlayerInertia():
+class RPSPlayer():
 	#notes:
 	def __init__(self,aX,aY,sign):
 		self.points = 0
@@ -157,20 +105,28 @@ class RPSPlayerInertia():
 		self.u = [1.0,0.0,0.0]
 		self.v = [0.0,sign,0.0]
 		self.w = [0.0,0.0,sign]
-		self.uVelocity = 0.0
-		self.vVelocity = 0.0
-		self.wVelocity = 0.0
+		self.speed = 0.05
 		self.calcColor()
 		self.rotate((-1.0/m.sqrt(2.0),1.0/m.sqrt(2.0),0.0), 1.0, m.atan(m.sqrt(2.0)))
+
+	def initMind():
+		self.NNdim = [12,16,7]
+		self.M1 = 2.0*np.random.rand(self.NNdim[1],self.NNdim[0]) - 1.0
+		self.B1 = 2.0*self.NNdim[0]*np.random.rand(self.NNdim[1],1) - 1.0*self.NNdim[0]
+		self.M2 = 2.0*np.random.rand(self.NNdim[2],self.NNdim[1]) - 1.0
+		self.B2 = 2.0*self.NNdim[1]*np.random.rand(self.NNdim[2],1) - 1.0*self.NNdim[1]
+		self.B3 = 2.0*np.random.rand(self.NNdim[2],1) - 1.0
+		self.AIPress = [False, False, False, False, False, False]
+		self.histLen = 1000
+		self.myHist = np.zeros(self.histLen, dtype=(int,3))	#combine these into one length=6 tuple
+		self.opHist = np.zeros(self.histLen, dtype=(int,3))	#combine these into one length=6 tuple
+		self.stepCount = 0
 
 	def reset(self,sign):
 		sign = float(sign)/abs(sign)
 		self.u = [1.0,0.0,0.0]
 		self.v = [0.0,sign,0.0]
 		self.w = [0.0,0.0,sign]
-		self.uVelocity = 0.0
-		self.vVelocity = 0.0
-		self.wVelocity = 0.0
 		self.rotate((-1.0/m.sqrt(2.0),1.0/m.sqrt(2.0),0.0), 1.0, m.atan(m.sqrt(2.0)))
 
 	def calcColor(self):
@@ -179,14 +135,20 @@ class RPSPlayerInertia():
 		tempB = int(255.0 * m.sqrt(max(0.0,-self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0, self.w[2])**2.0) )
 		self.color = (tempR,tempG,tempB)
 
-	def timestep(self):
-		magSpeed = m.sqrt(self.uVelocity**2.0 + self.vVelocity**2.0 + self.wVelocity**2.0)
-		uLimited = 0.05*self.uVelocity/(0.04+magSpeed)
-		vLimited = 0.05*self.vVelocity/(0.04+magSpeed)
-		wLimited = 0.05*self.wVelocity/(0.04+magSpeed)
-		self.rotate(self.u,1.0,uLimited)
-		self.rotate(self.v,1.0,vLimited)
-		self.rotate(self.w,1.0,wLimited)
+	def timeStep(self, PCPress):	#add AI switch, add opponent color input
+		if PCPress[0]:
+			self.rotate(self.u, 1.0, self.speed)
+		if PCPress[1]:
+			self.rotate(self.u,-1.0, self.speed)
+		if PCPress[3]:
+			self.rotate(self.v, 1.0, self.speed)
+		if PCPress[2]:
+			self.rotate(self.v,-1.0, self.speed)
+		if PCPress[4]:
+			self.rotate(self.w, 1.0, self.speed)
+		if PCPress[5]:
+			self.rotate(self.w,-1.0, self.speed)
+		self.calcColor()
 
 	def rotate(self,axis,spin,theta):
 		a = m.cos(theta/2.0)
@@ -215,6 +177,33 @@ class RPSPlayerInertia():
 		self.w[0] = wQ.comp[1]
 		self.w[1] = wQ.comp[2]
 		self.w[2] = wQ.comp[3]
+
+class RPSPlayerInertia(RPSPlayer):
+	#notes:
+	def __init__(self,aX,aY,sign):
+		RPSPlayer.__init__(self,aX,aY,sign)
+		self.uVelocity = 0.0
+		self.vVelocity = 0.0
+		self.wVelocity = 0.0
+		
+	def timestep(self):
+		magSpeed = m.sqrt(self.uVelocity**2.0 + self.vVelocity**2.0 + self.wVelocity**2.0)
+		uLimited = 0.05*self.uVelocity/(0.04+magSpeed)
+		vLimited = 0.05*self.vVelocity/(0.04+magSpeed)
+		wLimited = 0.05*self.wVelocity/(0.04+magSpeed)
+		self.rotate(self.u,1.0,uLimited)
+		self.rotate(self.v,1.0,vLimited)
+		self.rotate(self.w,1.0,wLimited)
+
+	def reset(self,sign):
+		sign = float(sign)/abs(sign)
+		self.u = [1.0,0.0,0.0]
+		self.v = [0.0,sign,0.0]
+		self.w = [0.0,0.0,sign]
+		self.uVelocity = 0.0
+		self.vVelocity = 0.0
+		self.wVelocity = 0.0
+		self.rotate((-1.0/m.sqrt(2.0),1.0/m.sqrt(2.0),0.0), 1.0, m.atan(m.sqrt(2.0)))
 
 class RPSNeuralInertia(RPSPlayerInertia):
 	def __init__(self,aX,aY,sign):

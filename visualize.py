@@ -78,8 +78,8 @@ def drawSphere(aSphere, aP, aO):
 		y = aP.v[0]*p[0]+aP.v[1]*p[1]+aP.v[2]*p[2]
 		z = aP.w[0]*p[0]+aP.w[1]*p[1]+aP.w[2]*p[2]
 		r = 1.0# - 0.5*abs(p[0]/m.sqrt(3)+p[1]/m.sqrt(3)+p[2]/m.sqrt(3))
-		#comp = attack4D(p,aO.w)
-		comp = attack2(p,aO.w)
+		comp = attack4D(p,aO.w)
+		#comp = attack2(p,aO.w)
 		if z >= 0.0:
 		#	foreground.append((r*x,r*y,r*z)+tuple(50+0.25*x for x in aSphere.colors[i])+(0.5,))
 			foreground.append((r*x,r*y,r*z)+tuple(max(0,min(255,int(0.5*a*abs(comp)))) for a in aSphere.colors[i])+(1.0,))
@@ -101,36 +101,36 @@ def drawSphere(aSphere, aP, aO):
 	radii.append((-aP.u[0],-aP.v[0],-aP.w[0])+CYAN+(1.0,))
 	radii.append((-aP.u[1],-aP.v[1],-aP.w[1])+MAGENTA+(1.0,))
 	radii.append((-aP.u[2],-aP.v[2],-aP.w[2])+YELLOW+(1.0,))
-	if zSafe >= 0.0:
-		foreground.append((xSafe,ySafe,zSafe,255,255,255,1.0))
-		background.append((-xSafe,-ySafe,-zSafe,255,255,255,1.0))
-	else:
-		background.append((xSafe,ySafe,zSafe,255,255,255,1.0))
-		foreground.append((-xSafe,-ySafe,-zSafe,255,255,255,1.0))
+#	if zSafe >= 0.0:
+#		foreground.append((xSafe,ySafe,zSafe,255,255,255,1.0))
+#		background.append((-xSafe,-ySafe,-zSafe,255,255,255,1.0))
+#	else:
+#		background.append((xSafe,ySafe,zSafe,255,255,255,1.0))
+#		foreground.append((-xSafe,-ySafe,-zSafe,255,255,255,1.0))
 
 
 	#draw red, green, blue, cyan, magenta, yellow axes within the sphere (line from center to surface)
 	#draw white axis from safe point to safe point through center of sphere
 	#draw rainbow of rays from center out to equator
 
-	for p in range(100):
-		tempE = rotate3Vector((1.0/m.sqrt(2.0),-1.0/m.sqrt(2.0),0.0), (0.58,0.58,0.58), p*2.0*m.pi/100.0)
-		tempX = aP.u[0]*tempE[0]+aP.u[1]*tempE[1]+aP.u[2]*tempE[2]
-		tempY = aP.v[0]*tempE[0]+aP.v[1]*tempE[1]+aP.v[2]*tempE[2]
-		tempZ = aP.w[0]*tempE[0]+aP.w[1]*tempE[1]+aP.w[2]*tempE[2]
-		comp = attack2(tempE, aO.w)
-		if tempZ >= 0.0:
-		#	foreground.append((tempX,tempY,tempZ)+calcColor(tempE)+(1.0,))
-			if comp > 0.0:
-				foreground.append((tempX,tempY,tempZ)+tuple(max(0,min(255,int(0.5*a*comp))) for a in GREEN)+(1.0,))
-			else:
-				foreground.append((tempX,tempY,tempZ)+tuple(max(0,min(255,int(-0.5*a*comp))) for a in RED)+(1.0,))
-		else:
-		#	background.append((tempX,tempY,tempZ)+calcColor(tempE)+(1.0,))
-			if comp > 0.0:
-				background.append((tempX,tempY,tempZ)+tuple(max(0,min(255,int(0.5*a*comp))) for a in GREEN)+(1.0,))
-			else:
-				background.append((tempX,tempY,tempZ)+tuple(max(0,min(255,int(-0.5*a*comp))) for a in RED)+(1.0,))
+#	for p in range(100):
+#		tempE = rotate3Vector((1.0/m.sqrt(2.0),-1.0/m.sqrt(2.0),0.0), (0.58,0.58,0.58), p*2.0*m.pi/100.0)
+#		tempX = aP.u[0]*tempE[0]+aP.u[1]*tempE[1]+aP.u[2]*tempE[2]
+#		tempY = aP.v[0]*tempE[0]+aP.v[1]*tempE[1]+aP.v[2]*tempE[2]
+#		tempZ = aP.w[0]*tempE[0]+aP.w[1]*tempE[1]+aP.w[2]*tempE[2]
+#		comp = attack2(tempE, aO.w)
+#		if tempZ >= 0.0:
+#		#	foreground.append((tempX,tempY,tempZ)+calcColor(tempE)+(1.0,))
+#			if comp > 0.0:
+#				foreground.append((tempX,tempY,tempZ)+tuple(max(0,min(255,int(0.5*a*comp))) for a in GREEN)+(1.0,))
+#			else:
+#				foreground.append((tempX,tempY,tempZ)+tuple(max(0,min(255,int(-0.5*a*comp))) for a in RED)+(1.0,))
+#		else:
+#		#	background.append((tempX,tempY,tempZ)+calcColor(tempE)+(1.0,))
+#			if comp > 0.0:
+#				background.append((tempX,tempY,tempZ)+tuple(max(0,min(255,int(0.5*a*comp))) for a in GREEN)+(1.0,))
+#			else:
+#				background.append((tempX,tempY,tempZ)+tuple(max(0,min(255,int(-0.5*a*comp))) for a in RED)+(1.0,))
 
 	g1 = (aO.w[2], aO.w[0], aO.w[1])
 	g2 = (-aO.w[1], -aO.w[2], -aO.w[0])
@@ -151,6 +151,12 @@ def drawSphere(aSphere, aP, aO):
 	x4 = aP.u[0]*g4[0]+aP.u[1]*g4[1]+aP.u[2]*g4[2]
 	y4 = aP.v[0]*g4[0]+aP.v[1]*g4[1]+aP.v[2]*g4[2]
 	z4 = aP.w[0]*g4[0]+aP.w[1]*g4[1]+aP.w[2]*g4[2]
+	#test drawing optimal goal for 4D attack
+#nope	g5 = (aO.w[1], aO.w[0], aO.w[2])
+	g5 = (aO.w[1], aO.w[0], aO.w[2])
+	x5 = aP.u[0]*g5[0]+aP.u[1]*g5[1]+aP.u[2]*g5[2]
+	y5 = aP.v[0]*g5[0]+aP.v[1]*g5[1]+aP.v[2]*g5[2]
+	z5 = aP.w[0]*g5[0]+aP.w[1]*g5[1]+aP.w[2]*g5[2]
 #	if z1 >= 0.0:
 #		foreground.append((x1,y1,z1)+GREEN+(1.0,))
 #		background.append((-x1,-y1,-z1)+RED+(1.0,))
@@ -163,26 +169,32 @@ def drawSphere(aSphere, aP, aO):
 #	else:
 #		background.append((x2,y2,z2)+GREEN+(1.0,))
 #		foreground.append((-x2,-y2,-z2)+RED+(1.0,))
-	if z3 >= 0.0:
-		foreground.append((x3,y3,z3)+GREEN+(1.0,))
-		background.append((-x3,-y3,-z3)+RED+(1.0,))
+#	if z3 >= 0.0:
+#		foreground.append((x3,y3,z3)+GREEN+(1.0,))
+#		background.append((-x3,-y3,-z3)+RED+(1.0,))
+#	else:
+#		background.append((x3,y3,z3)+GREEN+(1.0,))
+#		foreground.append((-x3,-y3,-z3)+RED+(1.0,))
+#	if z4 >= 0.0:
+#		foreground.append((x4,y4,z4)+YELLOW+(0.5,))
+#	else:
+#		background.append((x4,y4,z4)+YELLOW+(0.5,))
+	if z5 >= 0.0:
+		foreground.append((x5,y5,z5)+GREEN+(1.0,))
+		background.append((-x5,-y5,-z5)+RED+(1.0,))
 	else:
-		background.append((x3,y3,z3)+GREEN+(1.0,))
-		foreground.append((-x3,-y3,-z3)+RED+(1.0,))
-	if z4 >= 0.0:
-		foreground.append((x4,y4,z4)+YELLOW+(0.5,))
-	else:
-		background.append((x4,y4,z4)+YELLOW+(0.5,))
+		background.append((x5,y5,z5)+GREEN+(1.0,))
+		foreground.append((-x5,-y5,-z5)+RED+(1.0,))
 
-	for p in range(50):
-		tempG = rotate3Vector((x1,y1,z1), (x3,y3,z3), p*2.0*m.pi/50.)
-		tempZ = aP.w[0]*tempG[0]+aP.w[1]*tempG[1]+aP.w[2]*tempG[2]
-		if tempZ >= 0.0:
-			foreground.append(tuple(g for g in tempG)+GREEN+(0.25,))
-			background.append(tuple(-a for a in tempG)+RED+(0.25,))
-		else:
-			background.append(tuple(g for g in tempG)+GREEN+(0.25,))
-			foreground.append(tuple(-a for a in tempG)+RED+(0.25,))
+#	for p in range(50):
+#		tempG = rotate3Vector((x1,y1,z1), (x3,y3,z3), p*2.0*m.pi/50.)
+#		tempZ = aP.w[0]*tempG[0]+aP.w[1]*tempG[1]+aP.w[2]*tempG[2]
+#		if tempZ >= 0.0:
+#			foreground.append(tuple(g for g in tempG)+GREEN+(0.25,))
+#			background.append(tuple(-a for a in tempG)+RED+(0.25,))
+#		else:
+#			background.append(tuple(g for g in tempG)+GREEN+(0.25,))
+#			foreground.append(tuple(-a for a in tempG)+RED+(0.25,))
 
 
 	for p in background:
@@ -223,7 +235,9 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 			aPlayer1.vVelocity += -0.1*aPlayer1.vVelocity
 			aPlayer1.wVelocity += -0.1*aPlayer1.wVelocity
 		if press[K_SPACE]:
-			print aPlayer1.w
+			print "P1 (x,y,z) = ", aPlayer1.w
+			print "P2 (x,y,z) = ", aPlayer2.w
+			print "P1 attack P2 result: ", attack4D(aPlayer1.w, aPlayer2.w)
 		if press[K_i]:
 			aPlayer2.uVelocity += 0.01
 		if press[K_k]:

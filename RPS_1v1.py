@@ -141,6 +141,8 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 	SCORE = 0.0
 	scoreColor = (255,255,255)
 	while True:
+		PCPress1 = [False, False, False, False, False, False] 	#w, s, a, d, q, e
+		PCPress2 = [False, False, False, False, False, False] 	#i, k, j, l, u, o
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				pygame.quit()
@@ -151,31 +153,31 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 					sys.exit()
 		press = pygame.key.get_pressed()
 		if press[K_w]:
-			aPlayer1.rotate(aPlayer1.u, 1.0, aPlayer1.speed)
+			PCPress1[0] = True
 		if press[K_s]:
-			aPlayer1.rotate(aPlayer1.u,-1.0, aPlayer1.speed)
+			PCPress1[1] = True
 		if press[K_d]:
-			aPlayer1.rotate(aPlayer1.v, 1.0, aPlayer1.speed)
+			PCPress1[3] = True
 		if press[K_a]:
-			aPlayer1.rotate(aPlayer1.v,-1.0, aPlayer1.speed)
+			PCPress1[2] = True
 		if press[K_q]:
-			aPlayer1.rotate(aPlayer1.w, 1.0, aPlayer1.speed)
+			PCPress1[4] = True
 		if press[K_e]:
-			aPlayer1.rotate(aPlayer1.w,-1.0, aPlayer1.speed)
+			PCPress1[5] = True
 		if press[K_i]:
-			aPlayer2.rotate(aPlayer2.u, 1.0, aPlayer2.speed)
+			PCPress2[0] = True
 		if press[K_k]:
-			aPlayer2.rotate(aPlayer2.u,-1.0, aPlayer2.speed)
+			PCPress2[1] = True
 		if press[K_l]:
-			aPlayer2.rotate(aPlayer2.v, 1.0, aPlayer2.speed)
+			PCPress2[3] = True
 		if press[K_j]:
-			aPlayer2.rotate(aPlayer2.v,-1.0, aPlayer2.speed)
+			PCPress2[2] = True
 		if press[K_u]:
-			aPlayer2.rotate(aPlayer2.w, 1.0, aPlayer2.speed)
+			PCPress2[4] = True
 		if press[K_o]:
-			aPlayer2.rotate(aPlayer2.w,-1.0, aPlayer2.speed)
-		aPlayer1.calcColor()
-		aPlayer2.calcColor()
+			PCPress2[5] = True
+		aPlayer1.timeStep(PCPress1)
+		aPlayer2.timeStep(PCPress2)
 		SCORE -= 1.0*attack(aPlayer1,aPlayer2)
 		DISPLAYSURF.fill(BLACK)
 		drawSphere(aSphere, aPlayer1, aPlayer2)
