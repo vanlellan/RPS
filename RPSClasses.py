@@ -112,25 +112,26 @@ class RPSPlayer():
 
 	def initMind(self):
 		self.AIFlag = True
-		self.NNdim = [12,16,7]
+		self.NNdim = [3,16,7]
 		self.M1 = 2.0*np.random.rand(self.NNdim[1],self.NNdim[0]) - 1.0
-		self.B1 = 2.0*self.NNdim[0]*np.random.rand(self.NNdim[1],1) - 1.0*self.NNdim[0]
+		self.B1 = 2.0*self.NNdim[0]*np.random.rand(self.NNdim[1]) - 1.0*self.NNdim[0]
 		self.M2 = 2.0*np.random.rand(self.NNdim[2],self.NNdim[1]) - 1.0
-		self.B2 = 2.0*self.NNdim[1]*np.random.rand(self.NNdim[2],1) - 1.0*self.NNdim[1]
-		self.B3 = 2.0*np.random.rand(self.NNdim[2],1) - 1.0
-	#	self.histLen = 1000
-	#	self.myHist = np.zeros(self.histLen, dtype=(int,3))	#combine these into one length=6 tuple
-	#	self.opHist = np.zeros(self.histLen, dtype=(int,3))	#combine these into one length=6 tuple
-	#	self.stepCount = 0
+		self.B2 = 2.0*self.NNdim[1]*np.random.rand(self.NNdim[2]) - 1.0*self.NNdim[1]
+		self.histLen = 1000
+		self.myHist = np.zeros(self.histLen, dtype=(int,12))	#combine these into one length=6 tuple
+		self.stepCount = 0
 
-	def think(self, opponentColor):
-		OpX = self.u[0]*opponentColor[0]+self.u[1]*opponentColor[1]+self.u[2]*opponentColor[2]
-		OpY = self.v[0]*opponentColor[0]+self.v[1]*opponentColor[1]+self.v[2]*opponentColor[2]
-		OpZ = self.w[0]*opponentColor[0]+self.w[1]*opponentColor[1]+self.w[2]*opponentColor[2]
-		#self.myHist = np.concatenate((self.myHist[1:], [self.color]), axis=0)
-		#self.opHist = np.concatenate((self.opHist[1:], [opponentColor]), axis=0)
-	#	self.myHist[self.stepCount] = self.color
-	#	self.myHist[self.stepCount] = opponentColor
+	def think(self, OPw):
+		OpX = self.u[0]*OPw[0]+self.u[1]*OPw[1]+self.u[2]*OPw[2]
+		OpY = self.v[0]*OPw[0]+self.v[1]*OPw[1]+self.v[2]*OPw[2]
+		OpZ = self.w[0]*OPw[0]+self.w[1]*OPw[1]+self.w[2]*OPw[2]
+		self.myHist[self.stepCount] = self.u + self.v + self.w + [a for a in OPw]
+		self.stepCount += 1
+		if self.stepCount == self.histLen:
+			self.stepCount = 0
+			with open("Hist.pickle","wb") as pickleFile:
+				pickle.dump(self.myHist, pickleFile, protocol=pickle.HIGHEST_PROTOCOL)
+			print "History Picked and Saved!"
 		# nrow x ncol
 		# I  is 3x1	3	--input layer of nodes
 		# O  is 7x1	7	--output layer of nodes
@@ -140,11 +141,23 @@ class RPSPlayer():
 		# M2 is 7x16	112	--weight matrix between H and O
 		# B2 is 7x1	7	--bias applied when filling O
 		# Total number of fit parameters = 209
-		I = np.array([float(x)/255. for x in self.u+self.v+self.w+list(opponentColor)]).reshape(self.NNdim[0],1)
-		H = 1.0/(1.0+np.exp(-(np.dot(self.M1,I)+self.B1)))
-		O = 1.0/(1.0+np.exp(-(np.dot(self.M2,H)+self.B2)))
-		O = 0.5 * (np.sign(O-0.5) + 1.0)	#threshold O at 0.5
+		#I = np.array([float(x)/255. for x in self.u+self.v+self.w+list(opponentColor)]).reshape(self.NNdim[0],1)
+		I = np.array([OpX, OpY, OpZ])
+		H = 1.0/(1.0+np.exp(-np.add(np.dot(self.M1,I),self.B1)))
+		O = 1.0/(1.0+np.exp(-np.add(np.dot(self.M2,H),self.B2)))
 		return O.reshape(self.NNdim[2])
+
+	def calcTarget4D(self, aOw):
+		#Calculate "Target Point on Sphere", i.e. the optimal choice of position given the opponents current position
+		b = aOw
+		B0 =  b[0]*0.0 + b[1]/1.4 + b[2]/2.0
+		B1 =  b[0]/1.4 + b[1]*0.0 - b[2]/2.0
+		B2 =  b[0]*0.0 - b[1]/1.4 + b[2]/2.0
+		B3 = -b[0]/1.4 + b[1]*0.0 - b[2]/2.0
+		v4 = (B2-B1, B3-B2, B0-B3, B1-B0)
+		v3 = (v4[1]/1.4-v4[3]/1.4, v4[0]/1.4-v4[2]/1.4, v4[0]/2.0-v4[1]/2.0+v4[2]/2.0-v4[3]/2.0)
+		magv3 = m.sqrt(v3[0]**2 + v3[1]**2 + v3[2]**2)	#I'm not sure why the normalization isn't already correct here...
+		return tuple(i/magv3 for i in v3)
 
 	def attack4D(self, aP2):
 		#self attacks aP2 in FOUR DIMENSIONS (use 1.4 for sqrt(2))
@@ -175,9 +188,9 @@ class RPSPlayer():
 		tempB = int(255.0 * m.sqrt(max(0.0,-self.w[0])**2.0+max(0.0,-self.w[1])**2.0+max(0.0, self.w[2])**2.0) )
 		self.color = (tempR,tempG,tempB)
 
-	def timeStep(self, PCPress, OpCol):	#change OpCol to TargetCol (optimal choice for self.color given op.color)
+	def timeStep(self, PCPress, OpCol):
 		if self.AIFlag:
-			factor = self.think(OpCol)
+			factor = self.think(self.calcTarget4D(OpCol))
 		else:
 			factor = PCPress
 		self.rotate(self.u, 1.0, self.speed*factor[0])

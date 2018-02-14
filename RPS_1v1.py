@@ -92,18 +92,10 @@ def drawSphere(aSphere, aP, aO):
 				background.append((r*x,r*y,r*z)+tuple(max(0,min(255,int(-0.5*a*comp))) for a in RED)+(0.5,))
 		#	background.append((r*x,r*y,r*z)+tuple(50+0.25*x for x in aSphere.colors[i])+(1.0,))
 
-	#Calculate and add "Target Point on Sphere", i.e. the optimal choice of position given the opponents current position
-	b = aO.w
-	B0 =  b[0]*0.0 + b[1]/1.4 + b[2]/2.0
-	B1 =  b[0]/1.4 + b[1]*0.0 - b[2]/2.0
-	B2 =  b[0]*0.0 - b[1]/1.4 + b[2]/2.0
-	B3 = -b[0]/1.4 + b[1]*0.0 - b[2]/2.0
-	v4 = (B2-B1, B3-B2, B0-B3, B1-B0)
-	v3 = (v4[1]/1.4-v4[3]/1.4, v4[0]/1.4-v4[2]/1.4, v4[0]/2.0-v4[1]/2.0+v4[2]/2.0-v4[3]/2.0)
-	x0 = (aP.u[0]*v3[0]+aP.u[1]*v3[1]+aP.u[2]*v3[2])/m.sqrt(3.0)
-	y0 = (aP.v[0]*v3[0]+aP.v[1]*v3[1]+aP.v[2]*v3[2])/m.sqrt(3.0)
-	z0 = (aP.w[0]*v3[0]+aP.w[1]*v3[1]+aP.w[2]*v3[2])/m.sqrt(3.0)
-	# something's wrong with the radius normalization here, but the angular position looks right
+	v3 = aP.calcTarget4D(aO.w)
+	x0 = aP.u[0]*v3[0]+aP.u[1]*v3[1]+aP.u[2]*v3[2]
+	y0 = aP.v[0]*v3[0]+aP.v[1]*v3[1]+aP.v[2]*v3[2]
+	z0 = aP.w[0]*v3[0]+aP.w[1]*v3[1]+aP.w[2]*v3[2]
 	if z0 >= 0.0:
 		foreground.append((x0,y0,z0)+GREEN+(2.0,))
 		background.append((-x0,-y0,-z0)+RED+(2.0,))
