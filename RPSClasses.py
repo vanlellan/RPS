@@ -145,6 +145,11 @@ class RPSPlayer():
 		I = np.array([OpX, OpY, OpZ])
 		H = 1.0/(1.0+np.exp(-np.add(np.dot(self.M1,I),self.B1)))
 		O = 1.0/(1.0+np.exp(-np.add(np.dot(self.M2,H),self.B2)))
+		O = np.array([-OpY, OpY, -OpX, OpX ,0.0, 0.0, 0.0])	#manual brainwashing!	[up, down, left, right, ...]
+		floor = np.zeros(O.shape)
+		ceiling = np.ones(O.shape)
+		O = np.maximum(floor, np.minimum(ceiling, O))
+		print O
 		return O.reshape(self.NNdim[2])
 
 	def calcTarget4D(self, aOw):

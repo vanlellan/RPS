@@ -215,7 +215,12 @@ def gameloop(aSphere, aPlayer1, aPlayer2):
 			PCPress2[5] = 1.0
 		aPlayer1.timeStep(PCPress1, aPlayer2.color)
 		aPlayer2.timeStep(PCPress2, aPlayer1.color)
-		SCORE -= 1.0*aPlayer1.attack4D(aPlayer2)
+		p1Vp2 = aPlayer1.attack4D(aPlayer2)
+		p2Vp1 = aPlayer2.attack4D(aPlayer1)
+		#SCORE -= 1.0*aPlayer1.attack4D(aPlayer2)
+		SCORE += 1.0*p2Vp1 - 1.0*p1Vp2
+		# WOW! This battle is non-symmetric! is there a typo somewhere?
+		#print p1Vp2, ' + ', p2Vp1, ' = ', p1Vp2+p2Vp1
 		DISPLAYSURF.fill(BLACK)
 		drawSphere(aSphere, aPlayer1, aPlayer2)
 		drawSphere(aSphere, aPlayer2, aPlayer1)
