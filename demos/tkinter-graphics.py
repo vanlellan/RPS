@@ -2,6 +2,8 @@
 #Randall Evan McClellan -- 2020-04-30
 
 import tkinter as tk
+import os
+import platform
 
 #ToDo:
 #   [ ] Use pressed dict to handle key press/release, rather than OS
@@ -38,8 +40,15 @@ class demoScreen():
         self.root.destroy()
 
 if __name__ == "__main__":
+    if 'Linux' == platform.system():
+        print('Detected Linux, disabling keypress autorepeat...')
+        os.system('xset r off')
+
     demo = demoScreen()
     demo.root.mainloop()
+
+    print('re-enabling keypress autorepeat...')
+    os.system('xset r on')
     
 
 
