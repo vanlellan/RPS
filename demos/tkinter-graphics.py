@@ -13,28 +13,31 @@ class demoScreen():
     def __init__(self):
         self.root = tk.Tk()
         self.pressedDict = {'Left':False, 'Right':False, 'Up':False, 'Down':False}
+        self.keyMap = {'Left':(-1,0), 'Right':(1,0), 'Up':(0,-1), 'Down':(0,1)}
         self.canvas = tk.Canvas(self.root, width=400, height=400)
-        self.circle1 = self.canvas.create_oval(20,20,200,200,outline='black',fill='red')
+        self.circle1 = self.canvas.create_oval(20,20,30,30,outline='black',fill='red')
         self.canvas.bind('<Escape>', self.bail)
         self.canvas.bind('<KeyPress>', self.printEvent)
         self.canvas.bind('<KeyRelease>', self.printEvent)
         self.canvas.pack()
         self.canvas.focus_set()
         self.canvas.update()
-        print("Got Here end init")
+        self.draw()
 
     def printEvent(self, event):
-        print("Got Here printEvent")
         position = "x={}, y={}".format(event.x, event.y)
-        print(event.type, "event", position, event.keysym)
-        if event.keysym in ['Left', 'Right', 'Up', 'Down']:
-            self.move(self, event.keysym)
+        if str(event.type) == 'KeyPress':
+            self.pressedDict[event.keysym] = True
+        if str(event.type) == 'KeyRelease':
+            self.pressedDict[event.keysym] = False
 
-    def move(self, event, aKey):
-        print("move")
-        keyMap = {'Left':(-1,0), 'Right':(1,0), 'Up':(0,-1), 'Down':(0,1)}
-        self.canvas.move(self.circle1, keyMap[aKey][0], keyMap[aKey][1])
+    def draw(self):
+        self.canvas.move(self.circle1, self.keyMap['Right'][0]*self.pressedDict['Right'], 0)     #right
+        self.canvas.move(self.circle1, 0, self.keyMap['Up'][1]*self.pressedDict['Up'])           #up
+        self.canvas.move(self.circle1, self.keyMap['Left'][0]*self.pressedDict['Left'], 0)       #left
+        self.canvas.move(self.circle1, 0, self.keyMap['Down'][1]*self.pressedDict['Down'])      #down
         self.canvas.update()
+        self.canvas.after(10, self.draw)
 
     def bail(self, event):
         self.root.destroy()
@@ -45,7 +48,10 @@ if __name__ == "__main__":
         os.system('xset r off')
 
     demo = demoScreen()
-    demo.root.mainloop()
+    try:
+        demo.root.mainloop()
+    except Exception as excpt:
+        print(excpt)
 
     print('re-enabling keypress autorepeat...')
     os.system('xset r on')
