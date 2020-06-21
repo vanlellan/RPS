@@ -7,7 +7,7 @@ import platform
 import math
 
 #ToDo:
-#   [ ] Use pressed dict to handle key press/release, rather than OS
+#   [X] Use pressed dict to handle key press/release, rather than OS
 
 
 class circ():
@@ -17,15 +17,15 @@ class circ():
         self.circle1 = self.aScreen.canvas.create_oval(20,20,30,30,outline='black',fill='red')
         self.vel = [0.0, 0.0]
         self.speed = 0.1
-        self.brake = 0.2
+        self.brake = 0.05
         self.draw()
 
     def draw(self):
         #add to velocities based on currently pressed arrow keys
-        self.vel[0] += self.speed*self.keyMap['Right'][0]*self.aScreen.pressedDict['Right']     #right
-        self.vel[1] += self.speed*self.keyMap['Up'][1]*self.aScreen.pressedDict['Up']           #up
-        self.vel[0] += self.speed*self.keyMap['Left'][0]*self.aScreen.pressedDict['Left']       #left
-        self.vel[1] += self.speed*self.keyMap['Down'][1]*self.aScreen.pressedDict['Down']       #down
+        self.vel[0] += self.speed*self.keyMap['Right'][0]*self.aScreen.pressedDict['Right']
+        self.vel[1] += self.speed*self.keyMap['Up'][1]*self.aScreen.pressedDict['Up']
+        self.vel[0] += self.speed*self.keyMap['Left'][0]*self.aScreen.pressedDict['Left']
+        self.vel[1] += self.speed*self.keyMap['Down'][1]*self.aScreen.pressedDict['Down']
         #reduce velocity if brake key is pressed (space)
         brakev0 = -math.copysign(1,self.vel[0])*self.brake*self.aScreen.pressedDict['space']
         brakev1 = -math.copysign(1,self.vel[1])*self.brake*self.aScreen.pressedDict['space']
@@ -70,8 +70,8 @@ if __name__ == "__main__":
         print('Detected Linux, disabling keypress autorepeat...')
         os.system('xset r off')
 
-    demo = demoScreen()
     try:
+        demo = demoScreen()
         demo.root.mainloop()
     except Exception as excpt:
         print(excpt)
