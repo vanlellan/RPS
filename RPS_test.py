@@ -53,7 +53,7 @@ class player():
 	def attack(self, aOther):
 		attackerT = np.array((self.rock, self.paper, self.scissors))
 		defender = np.array((aOther.rock, aOther.paper, aOther.scissors)).reshape(3,1)
-#		print defenderT, WORLDTENSOR, attacker
+#		print(defenderT, WORLDTENSOR, attacker)
 		preResult = np.dot(WORLDTENSOR,defender)
 		result = np.dot(attackerT, preResult)
 		return result
@@ -91,7 +91,7 @@ def gameloop(aP1,aP2):
 						subprocess.call(['spd-say','victorious'])
 					if outcome < 0.0:
 						subprocess.call(['spd-say','defeated'])
-					print "Outcome: ", outcome
+					print("Outcome: ", outcome)
 		outcomeI = int(10.0*abs(outcome))
 		aP1.calc_rps()
 		rockI = int(20.0*abs(aP1.rock))
@@ -100,7 +100,7 @@ def gameloop(aP1,aP2):
 		rockI2 = int(20.0*abs(aP2.rock))
 		paperI2 = int(20.0*abs(aP2.paper))
 		scissorsI2 = int(20.0*abs(aP2.scissors))
-#		print rockI, paperI, scissorsI
+#		print(rockI, paperI, scissorsI)
 		DISPLAYSURF.fill(BLACK)
 		basicfont = pygame.font.SysFont(None, 48)
 		textR = basicfont.render(str(aP1.rock), True, WHITE)
@@ -149,18 +149,18 @@ def gameloop(aP1,aP2):
 		pygame.display.update()
 		time.sleep(0.1)
 
-print WORLDTENSOR
-print "Notes:"
-print "\t-Three circles along the bottom are your 'rockness', 'paperness', and 'scissorsness'"
-print "\t-Green positive, red is negative (i.e. there is such thing as 'antirock')"
-print "\t-The size of the circles indicates magnitude"
-print "\t-They are normalized, such that (rock)^2 + (paper)^2 + (scissors)^2 = 1"
-print "\t-Use ijkl to rotate your RPS vector\n"
-print "\t-The upper circles are the 'AI' player (static for now)"
-print "\t-You can attack by pressing 'a' or 'enter'"
-print "\t-Attacking updates the circle in the middle"
-print "\t-Grean means you win, red means you lose"
-print "\t-Again, size indicates the magnitude of the win or loss"
+print(WORLDTENSOR)
+print("Notes:")
+print("\t-Three circles along the bottom are your 'rockness', 'paperness', and 'scissorsness'")
+print("\t-Green positive, red is negative (i.e. there is such thing as 'antirock')")
+print("\t-The size of the circles indicates magnitude")
+print("\t-They are normalized, such that (rock)^2 + (paper)^2 + (scissors)^2 = 1")
+print("\t-Use ijkl to rotate your RPS vector\n")
+print("\t-The upper circles are the 'AI' player (static for now)")
+print("\t-You can attack by pressing 'a' or 'enter'")
+print("\t-Attacking updates the circle in the middle")
+print("\t-Grean means you win, red means you lose")
+print("\t-Again, size indicates the magnitude of the win or loss")
 p1 = player()
 p2 = player()
 gameloop(p1,p2)
