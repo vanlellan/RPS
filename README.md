@@ -15,21 +15,21 @@
 	- [ ] each player has a trigger to 'attack', forcing a comparison of RPS vectors
 - [X] Continuous scoring
 	- [X] points are float-valued, determined by outcome of vector comparison
-- [ ]Discrete scoring
-	- [ ]points are integer valued, with pre-defined ranges for vector comparison output
-	- [ ]e.g. 0 points: 0.0-0.5, 1 point: 0.5-0.9, 2 points, 0.9-1.0
+- [ ] Discrete scoring
+	- [ ] points are integer valued, with pre-defined ranges for vector comparison output
+	- [ ] e.g. 0 points: 0.0-0.5, 1 point: 0.5-0.9, 2 points, 0.9-1.0
 - [ ] AI
 	- [ ] It would be quite fun to try to write an optimal AI for this game
 	- [ ] use a simple neural net (~few inputs are coordinates of player for past few steps, seven outputs: up,down,left,right,cw,ccw,brake, perhaps just one hidden layer?)
 - [ ] Separate attack/defense  **SAFE ZONES MAKE THIS A BAD IDEA**
-	[ ] each player controls two independent spheres: one for attack, one for defense
-	[ ] points can only be scored by attacking
-	[ ] the attacking player's attack vector is compared against the defending player's defense vector
+	- [ ] each player controls two independent spheres: one for attack, one for defense
+	- [ ] points can only be scored by attacking
+	- [ ] the attacking player's attack vector is compared against the defending player's defense vector
 - [ ] **NEW WAY TO DO IT:**
 	- [ ] attack and defense are determined by the same sphere, but the central reticule is split (left/right) (or top/bottom)
 			into an attack reticule and a defense reticule
 	- [ ] the angular separation between the two could be fixed, or variable, determined by the player directly, or determined by character gear/modifiers
-	- [ ]....you can still sort of park your defense reticule on the safezone, but it is more challenging to do it while moving your attack reticule
+	- [ ] you can still sort of park your defense reticule on the safezone, but it is more challenging to do it while moving your attack reticule
 - [X] angular momentum
 	- [X] the spheres conserve angular momentum
 	- [X] players control sphere orientation through application of torque
