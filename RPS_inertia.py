@@ -1,15 +1,24 @@
-# Testing implementation of sphere rotation for RPS battle mechanic
-# R Evan McClellan -- 2016-09-06
-#
-# To-Do:
-#	implement 'angular momentum' and friction
-#DONE	implement RPS comparison and win/loss status (tug-of-war, cumulative continuous win/loss)
-#DONE	add player 2, add "opponent" color swatch above each player sphere
-#	move keybindings to player class
-#DONE	make circles smaller toward horizon
-#	make simple 'snaking' AI
-#	make colorless version: draw win-maximization and loss-maximization points on the sphere itself
+#!/usr/bin/python3
+#vanlellan/RPS/RPS_inertia.py: Testing implementation of inertial sphere rotation for RPS battle mechanic
+#Copyright 2023 Randall Evan McClellan
 
+#This file is part of vanlellan/RPS.
+#
+#    vanlellan/RPS is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    vanlellan/RPS is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with vanlellan/RPS.  If not, see <http://www.gnu.org/licenses/>.
+
+
+# Im unsure of the status of the below ToDo items -- REM -- 2023-02-14
 #RPS_Inertia.py TO-DO:
 #DONE	needs speed limit
 #DONE	needs friction and brake

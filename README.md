@@ -21,6 +21,7 @@
 - [ ] AI
 	- [ ] It would be quite fun to try to write an optimal AI for this game
 	- [ ] use a simple neural net (~few inputs are coordinates of player for past few steps, seven outputs: up,down,left,right,cw,ccw,brake, perhaps just one hidden layer?)
+    - [ ] start with a simple random walk
 - [ ] Separate attack/defense  **SAFE ZONES MAKE THIS A BAD IDEA**
 	- [ ] each player controls two independent spheres: one for attack, one for defense
 	- [ ] points can only be scored by attacking
@@ -35,7 +36,7 @@
 	- [X] players control sphere orientation through application of torque
 	- [X] there should probably be some small friction applied
 	- [X] also, perhaps a "brake" key, to significantly increase friction
-
+- [ ] move keybindings to player class?
 
 
 ## Potential Applications-

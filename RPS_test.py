@@ -1,7 +1,21 @@
-# A implementation of Conway's Game of Live on a hexagonal grid
-# to practice calcuations and graphics with hexagonal grids
+#!/usr/bin/python3
+#vanlellan/RPS/RPS_test.py: Testing RPS battle mechanic
+#Copyright 2023 Randall Evan McClellan
+
+#This file is part of vanlellan/RPS.
 #
-# R Evan McClellan -- 2016-07-24
+#    vanlellan/RPS is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    vanlellan/RPS is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with vanlellan/RPS.  If not, see <http://www.gnu.org/licenses/>.
 
 import pygame, sys
 from pygame.locals import *
