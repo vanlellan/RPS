@@ -46,6 +46,11 @@
 	- [X] there should probably be some small friction applied
 	- [X] also, perhaps a "brake" key, to significantly increase friction
 - [ ] move keybindings to player class?
+- [ ] joy con controls:
+    - stick for pitch and roll (or yaw)
+    - bumpers for yaw (or roll)
+    - a to attack
+    - b to brake
 
 
 ## Potential Applications-
@@ -75,6 +80,7 @@
 		- [ ] change 'bullet' weapon to beam weapon
 		- [ ] beam weapon does instant, constant, long-range damage, low DPS (eventually overheats? pulse instead of beam?)
 		- [ ] beam color and shield color are determined by RPS sphere
+            - a 1-sphere (circle) could be the equator of a RPS 2-sphere, eliminating the safe zones
 
 - [ ] MINIMAL RPS GAME OF LIFE:
 	- all live squares have an RGB color
