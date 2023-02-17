@@ -31,6 +31,15 @@
 			into an attack reticule and a defense reticule
 	- [ ] the angular separation between the two could be fixed, or variable, determined by the player directly, or determined by character gear/modifiers
 	- [ ] you can still sort of park your defense reticule on the safezone, but it is more challenging to do it while moving your attack reticule
+- [ ] **SIMPLER NEW WAY:**
+    - attack and defense are determined by the same sphere
+    - the ship's shield *is* the chromasphere
+    - the attack color is whatever is directly in front of the nose of the ship
+    - defense color depends on *where* the incoming attack hits the shield
+    - the pilot flies the ship and decides when to fire
+    - the co-pilot (chroma-engineer?), orients the chromasphere
+    - visuals: open-circles represent enemy chroma-position, filled circles represent enemy physical angular position
+    - perhaps enemy chroma info is only shown if the enemy is in your reticule, or if you're in theirs
 - [X] angular momentum
 	- [X] the spheres conserve angular momentum
 	- [X] players control sphere orientation through application of torque
